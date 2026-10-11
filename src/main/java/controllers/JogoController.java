@@ -268,7 +268,7 @@ public class JogoController {
 
         cena101.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "No meio do incêndio, você correu. "
                                 + "Só que correu pra longe do seu filho, não pra perto.",
                         "FALA"
@@ -331,7 +331,7 @@ public class JogoController {
 
         cena111.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Pra mim, agora, é a mesma coisa. "
                                 + "Me convence do contrário.",
                         "FALA"
@@ -354,7 +354,7 @@ public class JogoController {
 
         cena112.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Pra mim, agora, é a mesma coisa. "
                                 + "Me convence do contrário.",
                         "FALA"
@@ -380,7 +380,7 @@ public class JogoController {
 
         cena102.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Os vizinhos disseram que ouviram vocês dois brigando "
                                 + "antes da fumaça começar. Sobre o quê?",
                         "FALA"
@@ -435,7 +435,7 @@ public class JogoController {
 
         cena121.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Toda briga tem a ver com a noite "
                                 + "em que a casa pega fogo, Katarina.",
                         "FALA"
@@ -458,7 +458,7 @@ public class JogoController {
 
         cena122.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Toda briga tem a ver com a noite "
                                 + "em que a casa pega fogo, Katarina.",
                         "FALA"
@@ -484,7 +484,7 @@ public class JogoController {
 
         cena103.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Toin diz que chegou antes dos bombeiros. "
                                 + "Que foi ele quem tirou você de dentro de casa. "
                                 + "Isso bate com o que você lembra?",
@@ -540,7 +540,7 @@ public class JogoController {
 
         cena131.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Isso é mais honesto do que qualquer coisa "
                                 + "que você me disse até agora.",
                         "FALA"
@@ -562,7 +562,7 @@ public class JogoController {
 
         cena132.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "'Na hora certa.' Interessante escolha de palavras "
                                 + "pra descrever um resgate.",
                         "FALA"
@@ -588,7 +588,7 @@ public class JogoController {
 
         cena104.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Me diz uma coisa que só você poderia saber "
                                 + "sobre aquela noite. "
                                 + "Uma coisa que não tá no meu relatório.",
@@ -649,7 +649,7 @@ public class JogoController {
 
         cena141.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Isso não está no meu relatório porque "
                                 + "ninguém tinha mencionado ainda.",
                         "FALA"
@@ -671,7 +671,7 @@ public class JogoController {
 
         cena142.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Ou talvez você já soubesse a resposta "
                                 + "e não quisesse me dar.",
                         "FALA"
@@ -697,7 +697,7 @@ public class JogoController {
 
         cena105.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Última pergunta, Katarina. "
                                 + "O que você viu, de verdade, "
                                 + "antes de tudo virar fumaça?",
@@ -849,7 +849,7 @@ public class JogoController {
 
         cena201.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "E isso era comum? "
                                 + "Ele aparecer assim, sem avisar?",
                         "FALA"
@@ -932,7 +932,7 @@ public class JogoController {
 
         cena202.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Você sentiu o cheiro e não disse nada. Por quê?",
                         "FALA"
                 )
@@ -1015,7 +1015,7 @@ public class JogoController {
 
         cena203.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Por que uma ligação de um amigo da família "
                                 + "precisa ser atendida com a porta trancada?",
                         "FALA"
@@ -1133,7 +1133,7 @@ public class JogoController {
 
         cena204.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Nenhuma dessas coisas, sozinha, é motivo pra nada. "
                                 + "Mas você mesma não acredita mais "
                                 + "que era tudo nada.",
@@ -1181,7 +1181,7 @@ public class JogoController {
 
         cena301.adicionarDialogo(
                 new Dialogo(
-                        passos,
+                        passos.getNome(),
                         "Toin, essa é a Katarina. "
                                 + "Katarina, esse aqui é meu irmão de escolha.",
                         "FALA"
@@ -1191,7 +1191,7 @@ public class JogoController {
 
         cena301.adicionarDialogo(
                 new Dialogo(
-                        toin,
+                        toin.getNome(),
                         "Então você é a mulher que finalmente fez "
                                 + "esse aí parar de falar de futebol "
                                 + "pra falar de outra coisa.",
@@ -1277,7 +1277,7 @@ public class JogoController {
 
         cena302.adicionarDialogo(
                 new Dialogo(
-                        toin,
+                        toin.getNome(),
                         "Que INCRÍVEL notícia, mano. "
                                 + "Não sei nem expressar o quão feliz fico por vocês.",
                         "FALA"
@@ -1327,7 +1327,7 @@ public class JogoController {
 
         cena401.adicionarDialogo(
                 new Dialogo(
-                        passos,
+                        passos.getNome(),
                         "Ele nem chora mais no colo de estranho, hein.",
                         "FALA"
                 )
@@ -1336,7 +1336,7 @@ public class JogoController {
 
         cena401.adicionarDialogo(
                 new Dialogo(
-                        toin,
+                        toin.getNome(),
                         "Eu não sou estranho, Passos.",
                         "FALA"
                 )
@@ -1345,7 +1345,7 @@ public class JogoController {
 
         cena401.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Você parou. Nessa parte da história, você sempre para.",
                         "FALA"
                 )
@@ -1452,7 +1452,7 @@ public class JogoController {
 
         cena402.adicionarDialogo(
                 new Dialogo(
-                        passos,
+                        passos.getNome(),
                         "Olha pra cara do meu filho, Katarina. "
                                 + "E me diz que ele não tem o queixo do Toin.",
                         "FALA"
@@ -1522,7 +1522,7 @@ public class JogoController {
 
         cena403.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Você disse que ele perguntou sobre o alarme. "
                                 + "Isso te pareceu estranho na hora?",
                         "FALA"
@@ -1611,7 +1611,7 @@ public class JogoController {
 
         cena404.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "A perícia achou que o alarme de incêndio "
                                 + "do quarto do seu filho tinha sido desligado manualmente. "
                                 + "Não foi defeito.",
@@ -1622,7 +1622,7 @@ public class JogoController {
 
         cena404.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Só três pessoas entraram naquele apartamento "
                                 + "nos últimos três dias. "
                                 + "Você, seu marido, e o Toin.",
@@ -1754,7 +1754,7 @@ public class JogoController {
 
         cena501.adicionarDialogo(
                 new Dialogo(
-                        toin,
+                        toin.getNome(),
                         "Eu passei os últimos dois anos ajudando essa família "
                                 + "a não desmoronar. "
                                 + "E agora eu sou suspeito por isso?",
@@ -1873,7 +1873,7 @@ public class JogoController {
 
         cena502.adicionarDialogo(
                 new Dialogo(
-                        passos,
+                        passos.getNome(),
                         "Eu traí ela. Eu sei. "
                                 + "Isso não me faz capaz de matar meu próprio filho.",
                         "FALA"
@@ -2010,7 +2010,7 @@ public class JogoController {
 
         cena531.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Katarina. O que você fez, "
                                 + "nos segundos antes do fogo tomar o quarto?",
                         "FALA"
@@ -2065,7 +2065,7 @@ public class JogoController {
 
         cena532.adicionarDialogo(
                 new Dialogo(
-                        fauan,
+                        fauan.getNome(),
                         "Katarina. O que você fez, "
                                 + "nos segundos antes do fogo tomar o quarto?",
                         "FALA"

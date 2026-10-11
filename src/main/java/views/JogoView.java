@@ -68,7 +68,7 @@ public class JogoView {
              */
             if (dialogo.getPersonagem() != null) {
                 System.out.println(
-                        dialogo.getPersonagem().getNome()
+                        dialogo.getPersonagem()
                                 + ": "
                                 + dialogo.getConteudo()
                 );

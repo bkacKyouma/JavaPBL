@@ -2,17 +2,17 @@ package models;
 
 public class Dialogo {
 
-    private Personagem personagem;
+    private String personagem;
     private String conteudo;
     private String tipo;
 
-    public Dialogo(Personagem personagem, String conteudo, String tipo) {
+    public Dialogo(String personagem, String conteudo, String tipo) {
         this.personagem = personagem;
         this.conteudo = conteudo;
         this.tipo = tipo;
     }
 
-    public Personagem getPersonagem() {
+    public String getPersonagem() {
         return personagem;
     }
 

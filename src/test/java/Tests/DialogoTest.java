@@ -1,4 +1,4 @@
-package test.java.Tests;
+package Tests;
 
 
 import models.Dialogo;
@@ -11,7 +11,7 @@ class DialogoTest {
     @Test
     void testeCriacaoDialogo() {
         Psecundario npc = new Psecundario(2, "Toin");
-        Dialogo dialogo = new Dialogo(npc, "Onde você estava?", "Interrogação");
+        Dialogo dialogo = new Dialogo("npc", "Onde você estava?", "Interrogação");
 
         assertEquals(npc, dialogo.getPersonagem());
         assertEquals("Onde você estava?", dialogo.getConteudo());
