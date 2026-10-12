@@ -1,0 +1,20 @@
+{
+  "versao" : 1,
+  "slot" : 2,
+  "dataSalvamento" : 1791782945121,
+  "resumo" : "A NOITE QUE NÃO SE APAGA - Uma mentira registrada",
+  "idProtagonista" : 1,
+  "nomeProtagonista" : "Katarina",
+  "temperamento" : "SANGUE_FRIO",
+  "memoria" : 10,
+  "estabilidadeEmocional" : 40,
+  "culpaPercebida" : 35,
+  "confiancaFauan" : 25,
+  "vinculoPassos" : 60,
+  "suspeitaToin" : 50,
+  "posturaPaternidade" : "INDEFINIDA",
+  "pistas" : [ ],
+  "capituloAtualId" : 1,
+  "cenaAtualId" : 122,
+  "brunoSobreviveu" : false
+}

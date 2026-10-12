@@ -1,0 +1,20 @@
+{
+  "versao" : 1,
+  "slot" : 3,
+  "dataSalvamento" : 1791783335112,
+  "resumo" : "A NOITE QUE NÃO SE APAGA - Bloco 1 - A fuga",
+  "idProtagonista" : 1,
+  "nomeProtagonista" : "Katarina",
+  "temperamento" : "SANGUE_QUENTE",
+  "memoria" : 0,
+  "estabilidadeEmocional" : 50,
+  "culpaPercebida" : 50,
+  "confiancaFauan" : 50,
+  "vinculoPassos" : 50,
+  "suspeitaToin" : 50,
+  "posturaPaternidade" : "INDEFINIDA",
+  "pistas" : [ ],
+  "capituloAtualId" : 1,
+  "cenaAtualId" : 101,
+  "brunoSobreviveu" : false
+}

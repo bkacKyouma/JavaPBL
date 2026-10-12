@@ -3,29 +3,26 @@ package views;
 import models.Cena;
 import models.Dialogo;
 import models.Escolha;
-import java.util.InputMismatchException;
+
 import java.util.List;
 import java.util.Scanner;
 
-
+// Exibe a cena atual e devolve ao Controller a opção escolhida pelo jogador.
 public class JogoView {
 
+    // Mantém um único Scanner para ler as entradas durante toda a partida.
     private static final Scanner scanner = new Scanner(System.in);
 
-    /*
-     * Exibe uma cena e as escolhas que o Controller
-     * determinou que estão disponíveis.
-     */
+
+    // Recebe a cena e apenas as escolhas que já passaram pelas condições de desbloqueio.
     public static int mostrarCena(
             Cena cena,
             List<Escolha> escolhasDisponiveis) {
 
         Terminal.limpaTerminal();
 
-        // =========================
-        // TÍTULO DA CENA
-        // =========================
 
+        // Mostra o título da cena atual.
         System.out.println(
                 "========================================"
         );
@@ -40,10 +37,8 @@ public class JogoView {
 
         System.out.println();
 
-        // =========================
-        // NARRATIVA
-        // =========================
 
+        // Mostra a descrição da cena quando existe texto narrativo cadastrado.
         if (cena.getTextoNarrativa() != null) {
 
             System.out.println(
@@ -54,31 +49,20 @@ public class JogoView {
         }
 
 
-        // =========================
-        // DIÁLOGOS
-        // =========================
-
+        // Percorre os diálogos da cena e exibe o nome do personagem antes da fala quando houver personagem associado.
         for (Dialogo dialogo : cena.getDialogos()) {
 
-            /*
-             * Se existir personagem associado,
-             * mostramos:
-             *
-             * FAUAN: Texto...
-             */
             if (dialogo.getPersonagem() != null) {
+
                 System.out.println(
                         dialogo.getPersonagem()
-                                + ": "
-                                + dialogo.getConteudo()
+                        + ": "
+                        + dialogo.getConteudo()
                 );
 
             } else {
 
-                /*
-                 * Permite utilizar Dialogo também
-                 * para descrições sem personagem.
-                 */
+                // Permite usar Dialogo também para textos narrativos sem personagem.
                 System.out.println(
                         dialogo.getConteudo()
                 );
@@ -88,92 +72,64 @@ public class JogoView {
         }
 
 
-        // =========================
-        // CENA SEM ESCOLHAS
-        // =========================
-
-        if (escolhasDisponiveis == null
-                || escolhasDisponiveis.isEmpty()) {
-
-            System.out.println(
-                    "0 - Voltar ao menu principal"
-            );
-
-            System.out.println(
-                    "[Pressione ENTER para continuar]"
-            );
-
-            String input = scanner.nextLine();
-
-            if (input.trim().equals("0")) {
-                return 0;
-            }
-
-            return -1;
+        // Mesmo sem escolhas, S salva e M retorna ao menu.
+        if (escolhasDisponiveis == null || escolhasDisponiveis.isEmpty()) {
+            System.out.print("[ENTER] Continuar | [S] Salvar | [M] Menu: ");
+            String entrada = scanner.nextLine().trim();
+            if (entrada.equalsIgnoreCase("S")) return -2;
+            if (entrada.equalsIgnoreCase("M")) return -3;
+            if (entrada.isEmpty()) return -1;
+            return 0;
         }
 
-
-        // =========================
-        // ESCOLHAS
-        // =========================
 
         System.out.println(
                 "----------- ESCOLHAS -----------"
         );
 
-        System.out.println(
-                "0 - Voltar ao menu principal\n"
-        );
 
-
+        // Numera somente as escolhas disponíveis, porque escolhas bloqueadas não podem aparecer para o jogador.
         for (int i = 0;
              i < escolhasDisponiveis.size();
              i++) {
 
             System.out.println(
                     (i + 1)
-                            + " - "
-                            + escolhasDisponiveis
-                            .get(i)
-                            .getTextoOpcao()
+                    + " - "
+                    + escolhasDisponiveis
+                        .get(i)
+                        .getTextoOpcao()
             );
         }
 
 
-        System.out.print(
-                "\nEscolha uma opção: "
-        );
+        System.out.print("\nEscolha uma opção | [S] Salvar | [M] Menu: ");
 
-
-        // =========================
-        // LEITURA DA OPÇÃO
-        // =========================
+        // nextLine permite tanto números quanto os comandos S e M.
+        String entrada = scanner.nextLine().trim();
+        if (entrada.equalsIgnoreCase("S")) return -2;
+        if (entrada.equalsIgnoreCase("M")) return -3;
 
         try {
-            int opcao = scanner.nextInt();
-
-            /*
-             * Remove o ENTER deixado pelo nextInt().
-             */
-            scanner.nextLine();
-
-            return opcao;
-
-        } catch (InputMismatchException e) {
-            /*
-             * Remove a entrada inválida.
-             */
-            scanner.nextLine();
-            /*
-             * O Controller tratará uma entrada vazia ou letras como inválido.
-             */
-            return -99;
+            return Integer.parseInt(entrada);
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 
+
+    // Exibe a mensagem recebida pelo Controller antes de aguardar um curto intervalo.
     public static void apresentaErro(String mensagem) {
+
         System.out.println();
+
         System.out.println(mensagem);
+
         Terminal.aplicaDelay(900);
+    }
+    // Evita sair acidentalmente e perder mudanças ainda não salvas.
+    public static boolean confirmarVoltarMenu() {
+        System.out.print("Mudanças não salvas serão perdidas. Voltar? (S/N): ");
+        return scanner.nextLine().trim().equalsIgnoreCase("S");
     }
 }

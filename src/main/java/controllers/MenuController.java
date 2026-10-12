@@ -1,103 +1,56 @@
 package controllers;
 
-import models.Protagonista;
 import views.MenuView;
 
-import java.awt.*;
-import java.util.List;
+import persistence.PersistenciaJogo;
 
+// Recebe as opções do MenuView e chama a funcionalidade correspondente.
 public class MenuController {
 
     public static Boolean menuPrincipalController() {
         int option = 0;
+        PersistenciaJogo persistencia = new PersistenciaJogo();
 
-        while (option != 4) {
+        while (option != 6) {
             option = MenuView.openMenu();
 
-            while (!List.of(
-                    1, 2, 3, 4, 5
-            ).contains(option)) {
-
-                MenuView.apresentaErro(
-                        "A entrada fornecida é inválida."
-                );
-
-                option =
-                        MenuView.openMenu();
+            while (option < 1 || option > 6) {
+                MenuView.apresentaErro("A entrada fornecida é inválida.");
+                option = MenuView.openMenu();
             }
 
-            /*
-             * NOVA PARTIDA
-             */
             if (option == 1) {
                 int atributoOption = MenuView.openAtributesMenu();
-
-                /*
-                 * Primeiro valida.
-                 */
-                while (!List.of(1, 2, 3).contains(atributoOption)) {
-
-                    MenuView.apresentaErro(
-                            "A entrada fornecida é inválida."
-                    );
-
+                while (atributoOption < 1 || atributoOption > 3) {
+                    MenuView.apresentaErro("Temperamento inválido.");
                     atributoOption = MenuView.openAtributesMenu();
                 }
-
-
-                /*
-                 * Só depois inicia o jogo.
-                 */
-                JogoController jogoController = new JogoController();
-
-                jogoController.iniciarJogo(
-                        atributoOption
-                );
+                new JogoController().iniciarJogo(atributoOption);
             }
 
-            /*
-             * INSTRUÇÕES
-             */
+            // Continuar abre o slot cujo arquivo foi salvo por último.
             if (option == 2) {
-                MenuView.Instrucoes();
+                int slot = persistencia.slotMaisRecente();
+                if (slot == 0) {
+                    MenuView.apresentaErro("Nenhuma partida salva foi encontrada.");
+                } else {
+                    new JogoController().carregarJogo(slot);
+                }
             }
 
-            /*
-             * CRÉDITOS
-             */
+            // Carregar permite escolher manualmente um dos três slots.
             if (option == 3) {
-                MenuView.Creditos();
-            }
-
-            /*
-             * SAIR
-             */
-            if (option == 4) {
-                int optionDados = MenuView.salvarDados();
-
-                if (optionDados == 1){
-                  MenuView.salvandoDados();
-                    Protagonista kat = new Protagonista(1, "Kat", "Sangue Frio");
-
-                    // A memória começa em 0, vai para 20
-                    kat.ajustarMemoria(20);
-                    // A estabilidade começa em 50, cai para 40
-                    kat.ajustarEstabilidade(-10);
-
-                    Database save = new Database("save_kat.json");
-                    save.salvarProgresso(kat);
-
-                    Protagonista katCarregada = save.carregarProgresso();
+                int slot = MenuView.escolherSlot("CARREGAR PARTIDA");
+                if (slot >= 1 && slot <= 3) {
+                    new JogoController().carregarJogo(slot);
+                } else if (slot != 0) {
+                    MenuView.apresentaErro("Slot inválido.");
                 }
-
-                else if(optionDados == -1) {
-                    MenuView.apresentaErro("Entrada inválida");
-                }
-
             }
-            if (option == 5) {
-                return true;
-            }
+
+            if (option == 4) MenuView.Instrucoes();
+            if (option == 5) MenuView.Creditos();
+            if (option == 6) return true;
         }
         return false;
     }

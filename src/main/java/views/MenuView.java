@@ -3,19 +3,15 @@ package views;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+// Mostra as telas do menu e devolve ao Controller as opções digitadas pelo jogador.
 public class MenuView {
 
-    /*
-     * Um único Scanner para toda a classe.
-     */
+    // O mesmo Scanner é reutilizado no menu principal, temperamento, instruções e créditos.
     private static final Scanner scanner =
             new Scanner(System.in);
 
 
-    // ==============================
-    // MENU PRINCIPAL
-    // ==============================
-
+    // Exibe as quatro opções do menu principal e retorna a opção digitada.
     public static int openMenu() {
 
         Terminal.limpaTerminal();
@@ -34,38 +30,24 @@ public class MenuView {
 
         System.out.println();
 
-        System.out.println(
-                "1 - Nova partida"
-        );
-
-        System.out.println(
-                "2 - Instruções"
-        );
-
-        System.out.println(
-                "3 - Créditos"
-        );
-
-        System.out.println(
-                "4 - Salvar dados"
-        );
-        System.out.println(
-                "5 - Sair"
-        );
+        System.out.println("1 - Nova partida");
+        System.out.println("2 - Continuar");
+        System.out.println("3 - Carregar partida");
+        System.out.println("4 - Instruções");
+        System.out.println("5 - Créditos");
+        System.out.println("6 - Sair");
 
         System.out.print(
                 "\nDigite o número da opção desejada: "
         );
 
 
+        // Retorna -1 quando a entrada não é numérica para que o MenuController faça a validação.
         try {
 
             int opcao = scanner.nextInt();
 
-            /*
-             * IMPORTANTE:
-             * remove o ENTER deixado pelo nextInt().
-             */
+            // Remove o ENTER que permanece no buffer depois do nextInt().
             scanner.nextLine();
 
             return opcao;
@@ -77,47 +59,9 @@ public class MenuView {
             return -1;
         }
     }
-    public static int salvarDados(){
-        Terminal.limpaTerminal();
-        System.out.println("bem vindo a tela de salvar dados");
-        System.out.println("1- Salvar");
-        System.out.println("2- Sair");
-        //Terminal.aplicaDelay(1000);
-        try {
 
-            int opcao = scanner.nextInt();
 
-            /*
-             * IMPORTANTE:
-             * remove o ENTER deixado pelo nextInt().
-             */
-            scanner.nextLine();
-
-            return opcao;
-
-        } catch (InputMismatchException e) {
-
-            scanner.nextLine();
-
-            return -1;
-        }
-
-    }
-
-    public static void salvandoDados(){
-        for (int i = 0; i<5; i++) {
-            System.out.print(".");
-            Terminal.aplicaDelay(350);
-           // System.out.println("oi?");
-        }
-        System.out.println("\ndados salvos com sucesso!");
-        Terminal.aplicaDelay(650);
-    }
-
-    // ==============================
-    // ESCOLHA DO TEMPERAMENTO
-    // ==============================
-
+    // Mostra os três temperamentos disponíveis antes do início de uma nova partida.
     public static int openAtributesMenu() {
 
         Terminal.limpaTerminal();
@@ -163,6 +107,7 @@ public class MenuView {
         );
 
 
+        // Retorna a opção numérica ou -1 para que o Controller rejeite uma entrada inválida.
         try {
 
             int opcao = scanner.nextInt();
@@ -180,10 +125,7 @@ public class MenuView {
     }
 
 
-    // ==============================
-    // INSTRUÇÕES
-    // ==============================
-
+    // Explica o contexto da investigação e quais elementos podem mudar com as escolhas.
     public static void Instrucoes() {
 
         Terminal.limpaTerminal();
@@ -219,7 +161,6 @@ public class MenuView {
                 "em sua própria casa."
         );
 
-        Terminal.aplicaDelay(2500);
 
         System.out.println();
 
@@ -235,7 +176,6 @@ public class MenuView {
                 "começam a se misturar ao presente."
         );
 
-        Terminal.aplicaDelay(2500);
 
         System.out.println();
 
@@ -251,7 +191,6 @@ public class MenuView {
                 "se relaciona com as pessoas envolvidas."
         );
 
-        Terminal.aplicaDelay(2500);
 
         System.out.println();
 
@@ -286,7 +225,6 @@ public class MenuView {
                 "- as pistas encontradas durante a história."
         );
 
-        Terminal.aplicaDelay(2500);
 
         System.out.println();
 
@@ -302,7 +240,6 @@ public class MenuView {
                 "tenham sido alcançadas anteriormente."
         );
 
-        Terminal.aplicaDelay(2500);
 
         System.out.println();
 
@@ -318,7 +255,6 @@ public class MenuView {
                 "novamente muito tempo depois."
         );
 
-        Terminal.aplicaDelay(2500);
 
         System.out.println();
 
@@ -330,7 +266,6 @@ public class MenuView {
                 "número correspondente à opção desejada."
         );
 
-        Terminal.aplicaDelay(2500);
 
         System.out.println();
 
@@ -346,7 +281,6 @@ public class MenuView {
                 "podem levar a diferentes conclusões."
         );
 
-        Terminal.aplicaDelay(2500);
 
         System.out.println();
 
@@ -358,10 +292,7 @@ public class MenuView {
     }
 
 
-    // ==============================
-    // CRÉDITOS
-    // ==============================
-
+    // Mostra os nomes dos desenvolvedores e aguarda ENTER antes de retornar ao menu.
     public static void Creditos() {
 
         Terminal.limpaTerminal();
@@ -391,12 +322,10 @@ public class MenuView {
         System.out.println(
                 "Bruno Carneiro"
         );
-        Terminal.aplicaDelay(600);
 
         System.out.println(
                 "Raphael Henrique"
         );
-        Terminal.aplicaDelay(600);
 
         System.out.println();
 
@@ -414,10 +343,7 @@ public class MenuView {
     }
 
 
-    // ==============================
-    // ERRO
-    // ==============================
-
+    // Mostra a mensagem de erro enviada pelo Controller e aplica um atraso antes da nova tentativa.
     public static void apresentaErro(
             String mensagem) {
 
@@ -426,5 +352,27 @@ public class MenuView {
         System.out.println(mensagem);
 
         Terminal.aplicaDelay(900);
+    }
+    // Pergunta em qual dos três slots o jogador deseja salvar ou carregar.
+    public static int escolherSlot(String titulo) {
+        Terminal.limpaTerminal();
+        System.out.println("=== " + titulo + " ===");
+        System.out.println("1 - Slot 1");
+        System.out.println("2 - Slot 2");
+        System.out.println("3 - Slot 3");
+        System.out.println("0 - Cancelar");
+        System.out.print("Escolha: ");
+
+        try {
+            return Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    // Evita substituir um save existente sem autorização do jogador.
+    public static boolean confirmarSobrescrita(int slot) {
+        System.out.print("O slot " + slot + " já possui um save. Substituir? (S/N): ");
+        return scanner.nextLine().trim().equalsIgnoreCase("S");
     }
 }
