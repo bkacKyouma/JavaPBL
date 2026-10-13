@@ -1,0 +1,23 @@
+{
+  "versao" : 1,
+  "slot" : 4,
+  "dataSalvamento" : 1791857501230,
+  "resumo" : "O VEREDITO - O veredito",
+  "idProtagonista" : 1,
+  "nomeProtagonista" : "Katarina",
+  "temperamento" : "SANGUE_FRIO",
+  "memoria" : 100,
+  "estabilidadeEmocional" : 5,
+  "culpaPercebida" : 15,
+  "confiancaFauan" : 20,
+  "vinculoPassos" : 100,
+  "suspeitaToin" : 55,
+  "posturaPaternidade" : "NEGACAO_TOTAL",
+  "pistas" : [ {
+    "nome" : "Alarme desligado manualmente",
+    "descricao" : "A perícia concluiu que o alarme do quarto de Bruno foi desligado manualmente."
+  } ],
+  "capituloAtualId" : 5,
+  "cenaAtualId" : 504,
+  "brunoSobreviveu" : false
+}

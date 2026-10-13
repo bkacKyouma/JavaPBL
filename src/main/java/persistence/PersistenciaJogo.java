@@ -11,7 +11,7 @@ import java.nio.file.StandardCopyOption;
 // Salva e carrega os três slots usando arquivos JSON e a biblioteca Jackson.
 public class PersistenciaJogo {
 
-    public static final int TOTAL_SLOTS = 3;
+    public static final int TOTAL_SLOTS = 4;
 
     private final ObjectMapper mapper = new ObjectMapper();
     private final Path pasta = Path.of("saves");
@@ -78,4 +78,6 @@ public class PersistenciaJogo {
         }
         return maisRecente;
     }
+
+    //public boolean salvaConfig(){}
 }

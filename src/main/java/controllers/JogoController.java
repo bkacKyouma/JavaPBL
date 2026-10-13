@@ -15,12 +15,20 @@ import models.Protagonista;
 import models.Psecundario;
 
 import views.JogoView;
+import views.MenuView;
+import views.Terminal;
 
 
 // Coordena a partida: cria o conteúdo narrativo, aplica regras especiais e move o EstadoJogo entre as cenas.
 public class JogoController {
 
+    // Apenas declare as variáveis, sem dar 'new' aqui
+    private JogoView jogoView;
+    private MenuView menuView;
     private EstadoJogo estadoJogo;
+
+
+    // private EstadoJogo estadoJogo;
 
     // Referências dos personagens secundários usadas na criação dos diálogos e cenas.
     private Psecundario fauan;
@@ -40,7 +48,11 @@ public class JogoController {
 
     private final PersistenciaJogo persistencia = new PersistenciaJogo();
 
-
+    // ADICIONE ESTE CONSTRUTOR
+    public JogoController(String corPrimaria, String corSecundaria, String modo) {
+        this.jogoView = new JogoView(corPrimaria, corSecundaria, modo);
+        this.menuView = new MenuView(corPrimaria, corSecundaria, modo);
+    }
     // Converte o temperamento, cria Katarina, monta a história e inicia o loop da partida.
 
     public void iniciarJogo(int opcaoTemperamento) {
@@ -74,7 +86,7 @@ public class JogoController {
         try {
             DadosPartida dados = persistencia.carregar(slot);
             if (dados == null) {
-                JogoView.apresentaErro("Não existe partida salva no slot " + slot);
+                this.jogoView.apresentaErro("Não existe partida salva no slot " + slot);
                 return;
             }
 
@@ -86,27 +98,27 @@ public class JogoController {
 
             if (!estadoJogo.irParaCena(dados.cenaAtualId)
                     || estadoJogo.getCapituloAtual().getId() != dados.capituloAtualId) {
-                JogoView.apresentaErro("A cena guardada no save não foi encontrada.");
+                this.jogoView.apresentaErro("A cena guardada no save não foi encontrada.");
                 return;
             }
 
             brunoSobreviveu = dados.brunoSobreviveu;
             executarJogo();
         } catch (IOException e) {
-            JogoView.apresentaErro("Não foi possível carregar: " + e.getMessage());
+            this.jogoView.apresentaErro("Não foi possível carregar: " + e.getMessage());
         }
     }
 
     // Permite salvar a cena atual em qualquer momento, sem avançar a história.
     private void salvarManual() {
-        int slot = views.MenuView.escolherSlot("SALVAR PARTIDA");
+        int slot = this.menuView.escolherSlot("SALVAR PARTIDA");
         if (slot == 0) return;
         if (slot < 1 || slot > PersistenciaJogo.TOTAL_SLOTS) {
-            JogoView.apresentaErro("Slot inválido.");
+            this.jogoView.apresentaErro("Slot inválido.");
             return;
         }
 
-        if (persistencia.existe(slot) && !views.MenuView.confirmarSobrescrita(slot)) {
+        if (persistencia.existe(slot) && !this.menuView.confirmarSobrescrita(slot)) {
             return;
         }
 
@@ -116,7 +128,19 @@ public class JogoController {
             System.out.println("Partida salva no slot " + slot + ".");
             views.Terminal.aplicaDelay(900);
         } catch (IOException e) {
-            JogoView.apresentaErro("Erro ao salvar: " + e.getMessage());
+            this.jogoView.apresentaErro("Erro ao salvar: " + e.getMessage());
+        }
+    }
+    private void salvaAuto() {
+        int slot = 1;
+
+        DadosPartida dados = DadosPartida.capturar(estadoJogo, brunoSobreviveu, slot);
+        try {
+            persistencia.salvar(slot, dados);
+            System.out.println("Auto save no slot " + slot + ".");
+            views.Terminal.aplicaDelay(600);
+        } catch (IOException e) {
+            this.jogoView.apresentaErro("Erro ao salvar: " + e.getMessage());
         }
     }
 
@@ -293,8 +317,8 @@ public class JogoController {
                         101,
                         "Bloco 1 - A fuga",
                         "Sala de interrogatório da delegacia. "
-                        + "Katarina ainda está com cheiro de fumaça na roupa. "
-                        + "Fauan permanece de pé diante dela.",
+                                + "Katarina ainda está com cheiro de fumaça na roupa. "
+                                + "Fauan permanece de pé diante dela.",
                         "INTERROGATORIO"
                 );
 
@@ -303,7 +327,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "No meio do incêndio, você correu. "
-                        + "Só que correu pra longe do seu filho, não pra perto.",
+                                + "Só que correu pra longe do seu filho, não pra perto.",
                         "FALA"
                 )
         );
@@ -349,7 +373,7 @@ public class JogoController {
                         111,
                         "A resposta de Fauan",
                         "Fauan ajeita a postura, incomodado. "
-                        + "Ele não esperava uma resposta tão sincera.",
+                                + "Ele não esperava uma resposta tão sincera.",
                         "INTERROGATORIO"
                 );
 
@@ -358,7 +382,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Pra mim, agora, é a mesma coisa. "
-                        + "Me convence do contrário.",
+                                + "Me convence do contrário.",
                         "FALA"
                 )
         );
@@ -372,7 +396,7 @@ public class JogoController {
                         112,
                         "A resposta de Fauan",
                         "Fauan anota algo sem tirar os olhos dela. "
-                        + "A resposta veio rápida demais.",
+                                + "A resposta veio rápida demais.",
                         "INTERROGATORIO"
                 );
 
@@ -381,7 +405,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Pra mim, agora, é a mesma coisa. "
-                        + "Me convence do contrário.",
+                                + "Me convence do contrário.",
                         "FALA"
                 )
         );
@@ -405,7 +429,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Os vizinhos disseram que ouviram vocês dois brigando "
-                        + "antes da fumaça começar. Sobre o quê?",
+                                + "antes da fumaça começar. Sobre o quê?",
                         "FALA"
                 )
         );
@@ -415,7 +439,7 @@ public class JogoController {
                 criarEscolha(
                         1,
                         "Sobre Passos. Sobre o que ele andava fazendo "
-                        + "enquanto eu tava grávida do Bruno.",
+                                + "enquanto eu tava grávida do Bruno.",
                         121,
 
                         15,
@@ -451,7 +475,7 @@ public class JogoController {
                         121,
                         "A traição dita em voz alta",
                         "O silêncio pesa. "
-                        + "É a primeira vez que Katarina nomeia a traição em voz alta.",
+                                + "É a primeira vez que Katarina nomeia a traição em voz alta.",
                         "INTERROGATORIO"
                 );
 
@@ -460,7 +484,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Toda briga tem a ver com a noite "
-                        + "em que a casa pega fogo, Katarina.",
+                                + "em que a casa pega fogo, Katarina.",
                         "FALA"
                 )
         );
@@ -474,7 +498,7 @@ public class JogoController {
                         122,
                         "Uma mentira registrada",
                         "Fauan já sabia da traição por outra fonte. "
-                        + "A resposta de Katarina vira uma mentira registrada.",
+                                + "A resposta de Katarina vira uma mentira registrada.",
                         "INTERROGATORIO"
                 );
 
@@ -483,7 +507,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Toda briga tem a ver com a noite "
-                        + "em que a casa pega fogo, Katarina.",
+                                + "em que a casa pega fogo, Katarina.",
                         "FALA"
                 )
         );
@@ -507,8 +531,8 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Toin diz que chegou antes dos bombeiros. "
-                        + "Que foi ele quem tirou você de dentro de casa. "
-                        + "Isso bate com o que você lembra?",
+                                + "Que foi ele quem tirou você de dentro de casa. "
+                                + "Isso bate com o que você lembra?",
                         "FALA"
                 )
         );
@@ -518,7 +542,7 @@ public class JogoController {
                 criarEscolha(
                         1,
                         "Eu... não sei mais o que eu lembro "
-                        + "e o que ele me contou depois.",
+                                + "e o que ele me contou depois.",
                         131,
 
                         20,
@@ -554,7 +578,7 @@ public class JogoController {
                         131,
                         "Memórias emprestadas",
                         "Katarina percebe que algumas lembranças "
-                        + "podem ter sido reconstruídas depois do incêndio.",
+                                + "podem ter sido reconstruídas depois do incêndio.",
                         "INTERROGATORIO"
                 );
 
@@ -563,7 +587,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Isso é mais honesto do que qualquer coisa "
-                        + "que você me disse até agora.",
+                                + "que você me disse até agora.",
                         "FALA"
                 )
         );
@@ -585,7 +609,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "'Na hora certa.' Interessante escolha de palavras "
-                        + "pra descrever um resgate.",
+                                + "pra descrever um resgate.",
                         "FALA"
                 )
         );
@@ -609,8 +633,8 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Me diz uma coisa que só você poderia saber "
-                        + "sobre aquela noite. "
-                        + "Uma coisa que não tá no meu relatório.",
+                                + "sobre aquela noite. "
+                                + "Uma coisa que não tá no meu relatório.",
                         "FALA"
                 )
         );
@@ -620,7 +644,7 @@ public class JogoController {
                 criarEscolha(
                         1,
                         "O cheiro. Antes da fumaça, tinha um cheiro diferente. "
-                        + "Gasolina, eu acho. Isso não devia estar lá.",
+                                + "Gasolina, eu acho. Isso não devia estar lá.",
                         141,
 
                         25,
@@ -661,7 +685,7 @@ public class JogoController {
                         141,
                         "O cheiro",
                         "Fauan anota e, pela primeira vez, "
-                        + "parece genuinamente perturbado.",
+                                + "parece genuinamente perturbado.",
                         "INTERROGATORIO"
                 );
 
@@ -670,7 +694,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Isso não está no meu relatório porque "
-                        + "ninguém tinha mencionado ainda.",
+                                + "ninguém tinha mencionado ainda.",
                         "FALA"
                 )
         );
@@ -692,7 +716,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Ou talvez você já soubesse a resposta "
-                        + "e não quisesse me dar.",
+                                + "e não quisesse me dar.",
                         "FALA"
                 )
         );
@@ -716,8 +740,8 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Última pergunta, Katarina. "
-                        + "O que você viu, de verdade, "
-                        + "antes de tudo virar fumaça?",
+                                + "O que você viu, de verdade, "
+                                + "antes de tudo virar fumaça?",
                         "FALA"
                 )
         );
@@ -727,7 +751,7 @@ public class JogoController {
                 criarEscolha(
                         1,
                         "Uma sombra na porta do quarto do Bruno. "
-                        + "Eu acho que não era Passos.",
+                                + "Eu acho que não era Passos.",
                         106,
 
                         20,
@@ -748,7 +772,7 @@ public class JogoController {
                 criarEscolha(
                         2,
                         "Eu vi meu filho. Só isso. "
-                        + "Só ele importava naquele momento.",
+                                + "Só ele importava naquele momento.",
                         106,
 
                         10,
@@ -765,7 +789,7 @@ public class JogoController {
                 criarEscolha(
                         3,
                         "Tem alguma coisa errada nessa história, Fauan. "
-                        + "Eu quero saber o que Toin estava fazendo ali.",
+                                + "Eu quero saber o que Toin estava fazendo ali.",
                         106,
 
                         30,
@@ -799,7 +823,7 @@ public class JogoController {
                         106,
                         "O fim do primeiro interrogatório",
                         "A memória se fecha em torno de um único ponto. "
-                        + "Do lado de fora da sala, alguém bate à porta.",
+                                + "Do lado de fora da sala, alguém bate à porta.",
                         "NARRATIVA"
                 );
 
@@ -851,7 +875,7 @@ public class JogoController {
                         201,
                         "Visitas de surpresa",
                         "Toin aparece em casa de surpresa por duas noites seguidas, "
-                        + "sempre quando Passos viaja a trabalho.",
+                                + "sempre quando Passos viaja a trabalho.",
                         "FLASHBACK"
                 );
 
@@ -860,7 +884,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "E isso era comum? "
-                        + "Ele aparecer assim, sem avisar?",
+                                + "Ele aparecer assim, sem avisar?",
                         "FALA"
                 )
         );
@@ -870,7 +894,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         1,
                         "Toin sempre gostou de aparecer sem avisar. "
-                        + "Isso nunca significou nada.",
+                                + "Isso nunca significou nada.",
                         202,
 
                         10,
@@ -888,7 +912,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         2,
                         "Era estranho, sim. "
-                        + "Mas eu nunca parei pra pensar no porquê.",
+                                + "Mas eu nunca parei pra pensar no porquê.",
                         202,
 
                         15,
@@ -906,7 +930,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         3,
                         "Ele fazia isso porque sabia que eu tava sozinha! "
-                        + "E eu deixava, de fato.",
+                                + "E eu deixava, de fato.",
                         202,
 
                         15,
@@ -932,7 +956,7 @@ public class JogoController {
                         202,
                         "O perfume que não era o dela",
                         "Passos chega tarde, cheirando a um perfume "
-                        + "que não é o de Katarina.",
+                                + "que não é o de Katarina.",
                         "FLASHBACK"
                 );
 
@@ -950,7 +974,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         1,
                         "Porque perguntar não ia mudar a resposta. "
-                        + "Eu já sabia.",
+                                + "Eu já sabia.",
                         203,
 
                         10,
@@ -968,7 +992,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         2,
                         "Eu tava grávida, cansada. "
-                        + "Não tinha força pra mais uma briga.",
+                                + "Não tinha força pra mais uma briga.",
                         203,
 
                         10,
@@ -986,8 +1010,8 @@ public class JogoController {
                 criarEscolhaComTom(
                         3,
                         "Porque se eu perguntasse, "
-                        + "eu ia ter que fazer alguma coisa a respeito. "
-                        + "E eu não tava pronta.",
+                                + "eu ia ter que fazer alguma coisa a respeito. "
+                                + "E eu não tava pronta.",
                         203,
 
                         15,
@@ -1013,7 +1037,7 @@ public class JogoController {
                         203,
                         "A ligação no banheiro",
                         "O telefone toca. É Toin. "
-                        + "Katarina atende escondida no banheiro.",
+                                + "Katarina atende escondida no banheiro.",
                         "FLASHBACK"
                 );
 
@@ -1022,7 +1046,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Por que uma ligação de um amigo da família "
-                        + "precisa ser atendida com a porta trancada?",
+                                + "precisa ser atendida com a porta trancada?",
                         "FALA"
                 )
         );
@@ -1032,7 +1056,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         1,
                         "Não precisava. "
-                        + "Eu só queria um minuto sozinha. Isso é crime?",
+                                + "Eu só queria um minuto sozinha. Isso é crime?",
                         204,
 
                         10,
@@ -1050,7 +1074,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         2,
                         "Eu não sei. Foi automático. "
-                        + "Eu nem percebi que tinha trancado a porta.",
+                                + "Eu nem percebi que tinha trancado a porta.",
                         204,
 
                         10,
@@ -1068,7 +1092,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         3,
                         "Porque eu sabia como ia parecer! "
-                        + "E olha só, eu tava certa!",
+                                + "E olha só, eu tava certa!",
                         204,
 
                         10,
@@ -1086,8 +1110,8 @@ public class JogoController {
                 criarEscolha(
                         4,
                         "Eu tranquei a porta porque, nessa ligação, "
-                        + "ele disse uma coisa sobre o Bruno "
-                        + "que me deixou gelada.",
+                                + "ele disse uma coisa sobre o Bruno "
+                                + "que me deixou gelada.",
                         204,
 
                         25,
@@ -1133,8 +1157,8 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Nenhuma dessas coisas, sozinha, é motivo pra nada. "
-                        + "Mas você mesma não acredita mais "
-                        + "que era tudo nada.",
+                                + "Mas você mesma não acredita mais "
+                                + "que era tudo nada.",
                         "FALA"
                 )
         );
@@ -1169,7 +1193,7 @@ public class JogoController {
                         301,
                         "A primeira conversa",
                         "Passos e Toin se conhecem desde crianças. "
-                        + "Anos depois, Passos apresenta Katarina ao melhor amigo.",
+                                + "Anos depois, Passos apresenta Katarina ao melhor amigo.",
                         "FLASHBACK"
                 );
 
@@ -1178,7 +1202,7 @@ public class JogoController {
                 new Dialogo(
                         passos.getNome(),
                         "Toin, essa é a Katarina. "
-                        + "Katarina, esse aqui é meu irmão de escolha.",
+                                + "Katarina, esse aqui é meu irmão de escolha.",
                         "FALA"
                 )
         );
@@ -1188,8 +1212,8 @@ public class JogoController {
                 new Dialogo(
                         toin.getNome(),
                         "Então você é a mulher que finalmente fez "
-                        + "esse aí parar de falar de futebol "
-                        + "pra falar de outra coisa.",
+                                + "esse aí parar de falar de futebol "
+                                + "pra falar de outra coisa.",
                         "FALA"
                 )
         );
@@ -1202,7 +1226,7 @@ public class JogoController {
                 criarEscolha(
                         1,
                         "Ele contou o suficiente. "
-                        + "O resto eu prefiro descobrir sozinha.",
+                                + "O resto eu prefiro descobrir sozinha.",
                         302,
 
                         5,
@@ -1218,7 +1242,7 @@ public class JogoController {
                 criarEscolha(
                         2,
                         "Contou um pouco. "
-                        + "Parece que vocês dois têm história pra série de TV.",
+                                + "Parece que vocês dois têm história pra série de TV.",
                         302,
 
                         5,
@@ -1234,7 +1258,7 @@ public class JogoController {
                 criarEscolha(
                         3,
                         "Se tiver partes ruins já conta logo! "
-                        + "Eu preciso saber com quem tô lidando aqui.",
+                                + "Eu preciso saber com quem tô lidando aqui.",
                         302,
 
                         5,
@@ -1256,8 +1280,8 @@ public class JogoController {
                         302,
                         "Vinte anos sem um arranhão",
                         "Toin é padrinho do casamento de Katarina e Passos. "
-                        + "Depois, quando o teste de gravidez dá positivo, "
-                        + "Passos liga para ele antes mesmo dos próprios pais.",
+                                + "Depois, quando o teste de gravidez dá positivo, "
+                                + "Passos liga para ele antes mesmo dos próprios pais.",
                         "FLASHBACK"
                 );
 
@@ -1266,7 +1290,7 @@ public class JogoController {
                 new Dialogo(
                         toin.getNome(),
                         "Que INCRÍVEL notícia, mano. "
-                        + "Não sei nem expressar o quão feliz fico por vocês.",
+                                + "Não sei nem expressar o quão feliz fico por vocês.",
                         "FALA"
                 )
         );
@@ -1301,8 +1325,8 @@ public class JogoController {
                         401,
                         "A frase que não devia doer",
                         "A relação entre Passos e Toin começa a se desgastar. "
-                        + "Uma noite, Passos encontra Bruno dormindo "
-                        + "no colo do amigo.",
+                                + "Uma noite, Passos encontra Bruno dormindo "
+                                + "no colo do amigo.",
                         "FLASHBACK"
                 );
 
@@ -1338,7 +1362,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         1,
                         "Porque foi uma frase boba. "
-                        + "Eu só tô sendo cuidadosa com os detalhes.",
+                                + "Eu só tô sendo cuidadosa com os detalhes.",
                         402,
 
                         10,
@@ -1356,7 +1380,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         2,
                         "Porque na hora eu não dei importância. "
-                        + "Só depois é que aquilo ficou estranho.",
+                                + "Só depois é que aquilo ficou estranho.",
                         402,
 
                         15,
@@ -1374,7 +1398,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         3,
                         "Porque aquela frase me incomodou na hora! "
-                        + "E eu nunca disse isso a ninguém.",
+                                + "E eu nunca disse isso a ninguém.",
                         402,
 
                         15,
@@ -1392,8 +1416,8 @@ public class JogoController {
                 criarEscolha(
                         4,
                         "Porque foi o primeiro momento em que eu vi "
-                        + "meu marido com medo de perder alguma coisa "
-                        + "que ele nem sabia nomear.",
+                                + "meu marido com medo de perder alguma coisa "
+                                + "que ele nem sabia nomear.",
                         402,
 
                         20,
@@ -1425,7 +1449,7 @@ public class JogoController {
                         402,
                         "Fúria ou dúvida",
                         "A paranoia de Passos cresce até que "
-                        + "ele faz a acusação que muda o restante da história.",
+                                + "ele faz a acusação que muda o restante da história.",
                         "FLASHBACK"
                 );
 
@@ -1434,7 +1458,7 @@ public class JogoController {
                 new Dialogo(
                         passos.getNome(),
                         "Olha pra cara do meu filho, Katarina. "
-                        + "E me diz que ele não tem o queixo do Toin.",
+                                + "E me diz que ele não tem o queixo do Toin.",
                         "FALA"
                 )
         );
@@ -1444,7 +1468,7 @@ public class JogoController {
                 criarEscolha(
                         1,
                         "Como você ousa olhar pro seu filho "
-                        + "e duvidar dele por ciúme de um amigo?",
+                                + "e duvidar dele por ciúme de um amigo?",
                         403,
 
                         10,
@@ -1465,7 +1489,7 @@ public class JogoController {
                 criarEscolha(
                         2,
                         "Eu... eu nunca olhei procurando isso, Passos. "
-                        + "E agora eu não consigo parar de olhar.",
+                                + "E agora eu não consigo parar de olhar.",
                         403,
 
                         20,
@@ -1493,7 +1517,7 @@ public class JogoController {
                         403,
                         "O alarme",
                         "Dias antes do incêndio, Toin pergunta casualmente "
-                        + "se o alarme de incêndio ainda funcionava.",
+                                + "se o alarme de incêndio ainda funcionava.",
                         "FLASHBACK"
                 );
 
@@ -1502,7 +1526,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Você disse que ele perguntou sobre o alarme. "
-                        + "Isso te pareceu estranho na hora?",
+                                + "Isso te pareceu estranho na hora?",
                         "FALA"
                 )
         );
@@ -1514,7 +1538,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         1,
                         "Na hora, não. "
-                        + "Só faz sentido agora, do jeito que você tá perguntando.",
+                                + "Só faz sentido agora, do jeito que você tá perguntando.",
                         404,
 
                         15,
@@ -1532,7 +1556,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         2,
                         "Um pouco. Mas Toin sempre foi "
-                        + "de reparar em detalhes da casa.",
+                                + "de reparar em detalhes da casa.",
                         404,
 
                         10,
@@ -1550,7 +1574,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         3,
                         "Estranho?! Agora que você fala, "
-                        + "sim, foi muito estranho, e eu não vi!",
+                                + "sim, foi muito estranho, e eu não vi!",
                         404,
 
                         15,
@@ -1584,8 +1608,8 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "A perícia achou que o alarme de incêndio "
-                        + "do quarto do seu filho tinha sido desligado manualmente. "
-                        + "Não foi defeito.",
+                                + "do quarto do seu filho tinha sido desligado manualmente. "
+                                + "Não foi defeito.",
                         "FALA"
                 )
         );
@@ -1595,8 +1619,8 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Só três pessoas entraram naquele apartamento "
-                        + "nos últimos três dias. "
-                        + "Você, seu marido, e o Toin.",
+                                + "nos últimos três dias. "
+                                + "Você, seu marido, e o Toin.",
                         "FALA"
                 )
         );
@@ -1606,7 +1630,7 @@ public class JogoController {
                 criarEscolha(
                         1,
                         "Então investiga os três. "
-                        + "Comigo incluída, se for preciso.",
+                                + "Comigo incluída, se for preciso.",
                         405,
 
                         10,
@@ -1622,7 +1646,7 @@ public class JogoController {
                 criarEscolha(
                         2,
                         "Não foi o Passos. "
-                        + "Eu sei que não foi o Passos.",
+                                + "Eu sei que não foi o Passos.",
                         405,
 
                         10,
@@ -1676,7 +1700,7 @@ public class JogoController {
                         405,
                         "Toin chegou",
                         "Um oficial bate à porta. "
-                        + "Toin chegou à delegacia e quer depor.",
+                                + "Toin chegou à delegacia e quer depor.",
                         "NARRATIVA"
                 );
 
@@ -1713,7 +1737,7 @@ public class JogoController {
                         501,
                         "A defesa de Toin",
                         "Katarina, Toin, Passos e Fauan "
-                        + "estão juntos pela primeira vez.",
+                                + "estão juntos pela primeira vez.",
                         "INTERROGATORIO"
                 );
 
@@ -1722,8 +1746,8 @@ public class JogoController {
                 new Dialogo(
                         toin.getNome(),
                         "Eu passei os últimos dois anos ajudando essa família "
-                        + "a não desmoronar. "
-                        + "E agora eu sou suspeito por isso?",
+                                + "a não desmoronar. "
+                                + "E agora eu sou suspeito por isso?",
                         "FALA"
                 )
         );
@@ -1733,7 +1757,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         1,
                         "Ninguém disse que ajudar é crime, Toin. "
-                        + "Mas ajudar demais também é uma escolha.",
+                                + "Mas ajudar demais também é uma escolha.",
                         502,
 
                         5,
@@ -1751,7 +1775,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         2,
                         "Eu não sei mais separar o que foi ajuda "
-                        + "do que foi outra coisa.",
+                                + "do que foi outra coisa.",
                         502,
 
                         10,
@@ -1769,7 +1793,7 @@ public class JogoController {
                 criarEscolhaComTom(
                         3,
                         "Para de fingir que isso é sobre ajudar! "
-                        + "Nunca foi só sobre ajudar!",
+                                + "Nunca foi só sobre ajudar!",
                         502,
 
                         5,
@@ -1787,9 +1811,9 @@ public class JogoController {
                 criarEscolha(
                         4,
                         "Você perguntou se o alarme ainda funcionava. "
-                        + "Três dias antes. "
-                        + "E ele foi desligado na mão. "
-                        + "Me explica essa parte, Toin.",
+                                + "Três dias antes. "
+                                + "E ele foi desligado na mão. "
+                                + "Me explica essa parte, Toin.",
                         502,
 
                         15,
@@ -1839,7 +1863,7 @@ public class JogoController {
                 new Dialogo(
                         passos.getNome(),
                         "Eu traí ela. Eu sei. "
-                        + "Isso não me faz capaz de matar meu próprio filho.",
+                                + "Isso não me faz capaz de matar meu próprio filho.",
                         "FALA"
                 )
         );
@@ -1852,7 +1876,7 @@ public class JogoController {
                 criarEscolha(
                         1,
                         "Não, não faz. "
-                        + "E eu devia ter dito isso mais vezes nesses dois anos.",
+                                + "E eu devia ter dito isso mais vezes nesses dois anos.",
                         503,
 
                         10,
@@ -1873,7 +1897,7 @@ public class JogoController {
                 criarEscolha(
                         2,
                         "Eu sei que não foi você, Passos. "
-                        + "Eu sempre soube.",
+                                + "Eu sempre soube.",
                         503,
 
                         10,
@@ -1894,7 +1918,7 @@ public class JogoController {
                 criarEscolha(
                         3,
                         "Eu não sei mais o que você é capaz de fazer. "
-                        + "E isso é mais sobre mim do que sobre você.",
+                                + "E isso é mais sobre mim do que sobre você.",
                         503,
 
                         10,
@@ -1915,7 +1939,7 @@ public class JogoController {
                 criarEscolha(
                         4,
                         "A dúvida que você plantou nunca foi só sobre o Bruno. "
-                        + "Foi sobre nós dois.",
+                                + "Foi sobre nós dois.",
                         503,
 
                         10,
@@ -1964,7 +1988,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Katarina. O que você fez, "
-                        + "nos segundos antes do fogo tomar o quarto?",
+                                + "nos segundos antes do fogo tomar o quarto?",
                         "FALA"
                 )
         );
@@ -2019,7 +2043,7 @@ public class JogoController {
                 new Dialogo(
                         fauan.getNome(),
                         "Katarina. O que você fez, "
-                        + "nos segundos antes do fogo tomar o quarto?",
+                                + "nos segundos antes do fogo tomar o quarto?",
                         "FALA"
                 )
         );
@@ -2066,20 +2090,20 @@ public class JogoController {
                         504,
                         "O veredito",
                         "Fauan fecha a pasta. "
-                        + "A decisão nasce de tudo que foi construído "
-                        + "durante a investigação.",
+                                + "A decisão nasce de tudo que foi construído "
+                                + "durante a investigação.",
                         "FINAL"
                 );
 
 
-    // Identifica as cenas finais e devolve o nome interno correspondente ao final alcançado.
+        // Identifica as cenas finais e devolve o nome interno correspondente ao final alcançado.
 
         Cena final591 =
                 new Cena(
                         591,
                         "Final - A verdade que restou",
                         "Bruno sobreviveu ao incêndio. "
-                        + "A investigação leva ao indiciamento de Toin.",
+                                + "A investigação leva ao indiciamento de Toin.",
                         "FINAL"
                 );
 
@@ -2089,7 +2113,7 @@ public class JogoController {
                         592,
                         "Final - Depois da fumaça",
                         "Bruno não sobreviveu ao incêndio. "
-                        + "A investigação leva ao indiciamento de Toin.",
+                                + "A investigação leva ao indiciamento de Toin.",
                         "FINAL"
                 );
 
@@ -2099,7 +2123,7 @@ public class JogoController {
                         593,
                         "Final - Sob suspeita",
                         "Bruno sobreviveu ao incêndio. "
-                        + "Ao final da investigação, Katarina é indiciada.",
+                                + "Ao final da investigação, Katarina é indiciada.",
                         "FINAL"
                 );
 
@@ -2109,7 +2133,7 @@ public class JogoController {
                         594,
                         "Final - O peso da noite",
                         "Bruno não sobreviveu ao incêndio. "
-                        + "Ao final da investigação, Katarina é indiciada.",
+                                + "Ao final da investigação, Katarina é indiciada.",
                         "FINAL"
                 );
 
@@ -2149,7 +2173,7 @@ public class JogoController {
 
             if (cenaAtual == null) {
 
-                JogoView.apresentaErro(
+                this.jogoView.apresentaErro(
                         "Erro: cena atual não encontrada."
                 );
 
@@ -2187,7 +2211,7 @@ public class JogoController {
 
 
             int opcaoEscolhida =
-                    JogoView.mostrarCena(
+                    this.jogoView.mostrarCena(
                             cenaAtual,
                             escolhasDisponiveis
                     );
@@ -2200,12 +2224,12 @@ public class JogoController {
             }
 
             if (opcaoEscolhida == -3) {
-                if (JogoView.confirmarVoltarMenu()) return;
+                if (this.jogoView.confirmarVoltarMenu()) return;
                 continue;
             }
 
             if (opcaoEscolhida == 0) {
-                JogoView.apresentaErro("A entrada fornecida é inválida.");
+                this.jogoView.apresentaErro("A entrada fornecida é inválida.");
                 continue;
             }
 
@@ -2229,11 +2253,25 @@ public class JogoController {
                         cenaAtual.getId()
                 )) {
 
-                    estadoJogo.encerrarJogo(
-                            nomeDoFinal(
-                                    cenaAtual.getId()
-                            )
-                    );
+                    String finalAlcancado = nomeDoFinal(cenaAtual.getId());
+
+
+                    // Registra a conquista na PersistenciaGlobal
+                    persistence.PersistenciaGlobal persistenciaG = new persistence.PersistenciaGlobal();
+                    models.DadosGlobais perfil = persistenciaG.carregar();
+                    perfil.registrarFinal(finalAlcancado);
+                    if(!perfil.extrasDesbloqueados.contains("FIM"))
+                        perfil.registrarExtra("FIM?");
+                    if (finalAlcancado.contains("BRUNO_MORTO"))
+                        perfil.registrarExtra("BRINQUEDO_BRUNO");
+
+                    try {
+                        persistenciaG.salvar(perfil);
+                    } catch (java.io.IOException e) {
+                        this.jogoView.apresentaErro("Não foi possível salvar a conquista.");
+                    }
+
+                    estadoJogo.encerrarJogo(finalAlcancado);
 
                     continue;
                 }
@@ -2253,10 +2291,10 @@ public class JogoController {
 
                     if (!encontrou) {
 
-                        JogoView.apresentaErro(
+                        this.jogoView.apresentaErro(
                                 "Erro: cena "
-                                + proximaCena
-                                + " não encontrada."
+                                        + proximaCena
+                                        + " não encontrada."
                         );
 
                         break;
@@ -2278,7 +2316,7 @@ public class JogoController {
             if (opcaoEscolhida < 1
                     || opcaoEscolhida > escolhasDisponiveis.size()) {
 
-                JogoView.apresentaErro(
+                this.jogoView.apresentaErro(
                         "A entrada fornecida é inválida."
                 );
 
@@ -2308,7 +2346,7 @@ public class JogoController {
             );
 
 
-    // Capítulo 3: mostra a origem da relação entre Passos e Toin sem participação de Fauan.
+            // Capítulo 3: mostra a origem da relação entre Passos e Toin sem participação de Fauan.
             // No capítulo 3, o tom altera somente a estabilidade porque Fauan não está presente.
 
             if (cenaAtual.getId() == 301) {
@@ -2328,12 +2366,13 @@ public class JogoController {
 
             if (!encontrou) {
 
-                JogoView.apresentaErro(
+                this.jogoView.apresentaErro(
                         "Erro: próxima cena não encontrada."
                 );
 
                 break;
             }
+            this.salvaAuto();
         }
     }
 
@@ -2348,8 +2387,8 @@ public class JogoController {
         // Ao entrar na cena 404, adiciona automaticamente a pista do laudo se Katarina ainda não a possuir.
         if (cenaAtual.getId() == 404
                 && !protagonista.possuiPista(
-                        "Alarme desligado manualmente"
-                )) {
+                "Alarme desligado manualmente"
+        )) {
 
             protagonista.adicionarPista(
                     pistaAlarmeDesligado
@@ -2430,7 +2469,7 @@ public class JogoController {
                 brunoSobreviveu =
                         protagonista
                                 .getEstabilidadeEmocional()
-                        >= 55;
+                                >= 55;
             }
 
 
@@ -2440,7 +2479,7 @@ public class JogoController {
                 brunoSobreviveu =
                         protagonista
                                 .getVinculoPassos()
-                        >= 60;
+                                >= 60;
             }
         }
     }
@@ -2521,8 +2560,8 @@ public class JogoController {
 
         int credibilidadeToin =
                 100
-                - protagonista.getSuspeitaToin()
-                - (5 * quantidadePistasContraToin);
+                        - protagonista.getSuspeitaToin()
+                        - (5 * quantidadePistasContraToin);
 
 
         if (credibilidadeToin < 0) {
@@ -2537,7 +2576,7 @@ public class JogoController {
 
         boolean toinIndiciado =
                 protagonista.getConfiancaFauan()
-                >= credibilidadeToin;
+                        >= credibilidadeToin;
 
 
         int cenaFinal;

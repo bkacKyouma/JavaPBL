@@ -32,9 +32,11 @@ public class DadosPartida {
     }
 
     // Registra em um objeto todos os valores necessários para retomar a partida.
-    public static DadosPartida capturar(EstadoJogo estado,
-                                       boolean brunoSobreviveu,
-                                       int slot) {
+    public static DadosPartida capturar(
+        EstadoJogo estado,
+        boolean brunoSobreviveu,
+        int slot)
+        {
         Protagonista protagonista = estado.getProtagonista();
         DadosPartida dados = new DadosPartida();
 
