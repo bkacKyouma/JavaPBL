@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-// Salva e carrega os três slots usando arquivos JSON e a biblioteca Jackson.
+// Salva e carrega os slots de partida usando arquivos JSON e a biblioteca Jackson.
 public class PersistenciaJogo {
 
     public static final int TOTAL_SLOTS = 4;
@@ -16,7 +16,7 @@ public class PersistenciaJogo {
     private final ObjectMapper mapper = new ObjectMapper();
     private final Path pasta = Path.of("saves");
 
-    // Rejeita números fora dos três slots previstos.
+    // Valida o índice do slot e resolve o caminho do arquivo correspondente.
     private Path caminho(int slot) {
         if (slot < 1 || slot > TOTAL_SLOTS) {
             throw new IllegalArgumentException("Slot inválido: " + slot);
@@ -78,6 +78,4 @@ public class PersistenciaJogo {
         }
         return maisRecente;
     }
-
-    //public boolean salvaConfig(){}
 }

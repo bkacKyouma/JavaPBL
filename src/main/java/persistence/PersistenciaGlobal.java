@@ -9,14 +9,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-// Salva e carrega o perfil do jogador usando um único arquivo JSON.
+// Salva e carrega as preferências e conquistas globais em um único arquivo JSON.
 public class PersistenciaGlobal {
 
     private final ObjectMapper mapper = new ObjectMapper();
     private final Path pasta = Path.of("saves");
     private final Path caminhoArquivo = pasta.resolve("perfil.json");
 
-    // Cria um JSON temporário antes de substituir o arquivo de destino (prevenção contra corrupção).
+    // Cria um JSON temporário antes de substituir o arquivo de destino.
     public void salvar(DadosGlobais dados) throws IOException {
         Files.createDirectories(pasta);
         Path temporario = Files.createTempFile(pasta, "perfil-", ".tmp");
@@ -31,10 +31,9 @@ public class PersistenciaGlobal {
         }
     }
 
-    // Tenta ler o JSON; se o arquivo não existir ou falhar, devolve o perfil padrão.
+    // Lê o arquivo de perfil ou devolve a configuração padrão caso não exista ou seja inválido.
     public DadosGlobais carregar() {
         if (!Files.isRegularFile(caminhoArquivo)) {
-            // Arquivo não existe: primeira vez jogando. Devolve o padrão verde.
             return DadosGlobais.criarPadrao(
                     Terminal.ANSI_GREEN,
                     Terminal.ANSI_YELLOW,
@@ -45,14 +44,13 @@ public class PersistenciaGlobal {
         try {
             DadosGlobais dados = mapper.readValue(caminhoArquivo.toFile(), DadosGlobais.class);
 
-            // Validação de integridade
+            // Verifica se os campos essenciais do perfil foram preenchidos corretamente.
             if (dados == null || dados.versao != 1 || dados.corPrimaria == null) {
                 return DadosGlobais.criarPadrao(Terminal.ANSI_GREEN, Terminal.ANSI_YELLOW, "");
             }
             return dados;
 
         } catch (IOException e) {
-            // Se o arquivo estiver corrompido, imprime no console (opcional) e devolve o padrão.
             System.err.println("Aviso: Falha ao ler perfil.json. Usando configurações padrão.");
             return DadosGlobais.criarPadrao(Terminal.ANSI_GREEN, Terminal.ANSI_YELLOW, "");
         }
