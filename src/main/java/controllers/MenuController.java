@@ -6,13 +6,13 @@ import views.Colecionaveis;
 import views.MenuView;
 import persistence.PersistenciaJogo;
 
+// Recebe as opções do menu principal e aciona o fluxo correspondente.
 public class MenuController {
 
-    // Carrega o perfil do jogador (cores e conquistas)
+    // Carrega o perfil global para aplicar a formatação salva na interface do menu.
     private static final PersistenciaGlobal persistenciaGlobal = new PersistenciaGlobal();
     private static DadosGlobais perfilAtual = persistenciaGlobal.carregar();
 
-    // Instancia a view com o setup salvo
     private static final MenuView MenuScreen = new MenuView(
             perfilAtual.corPrimaria,
             perfilAtual.corSecundaria,
@@ -23,7 +23,7 @@ public class MenuController {
         int option = 0;
         PersistenciaJogo persistencia = new PersistenciaJogo();
 
-        // O loop principal agora vai até 7 (Sair)
+        // Mantém o menu principal em execução até que a opção de saída seja selecionada.
         while (option != 7) {
             option = MenuScreen.openMenu();
 
@@ -32,7 +32,7 @@ public class MenuController {
                 option = MenuScreen.openMenu();
             }
 
-            // NOVA PARTIDA
+            // Solicita o temperamento inicial da protagonista e inicia uma nova partida.
             if (option == 1) {
                 int atributoOption = MenuScreen.openAtributesMenu();
                 while (atributoOption < 1 || atributoOption > 3) {
@@ -42,7 +42,7 @@ public class MenuController {
                 new JogoController(perfilAtual.corPrimaria, perfilAtual.corSecundaria, perfilAtual.modo).iniciarJogo(atributoOption);
             }
 
-            // CARREGAR / CONTINUAR (Unificados)
+            // Permite escolher um dos quatro slots manualmente ou retomar o save mais recente.
             if (option == 2) {
                 int slotMaisRecente = persistencia.slotMaisRecente();
                 if (slotMaisRecente == 0) {
@@ -59,26 +59,26 @@ public class MenuController {
                 }
             }
 
-            // COLECIONÁVEIS (Submenu para Finais e Extras)
+            // Gerencia o submenu de colecionáveis, dividindo o acesso entre finais e conteúdos extras.
             if (option == 3) {
                 boolean noColecionaveis = true;
                 while (noColecionaveis) {
                     int optCol = MenuScreen.openColecionaveisMenu();
 
-                    if (optCol == 1) { // 1 - Galeria de Finais
+                    if (optCol == 1) {
                         perfilAtual = persistenciaGlobal.carregar();
                         MenuScreen.mostrarGaleriaFinais(perfilAtual.finaisDesbloqueados);
                     }
                     else if (optCol == 2) {
-                        // 2 - Conteúdos Extras
                         Colecionaveis colecionaveis = new Colecionaveis();
                         boolean noExtras = true;
+
+                        // Recarrega o perfil e verifica se a chave do extra escolhido já foi desbloqueada.
                         while (noExtras) {
                             perfilAtual = persistenciaGlobal.carregar();
                             int optExtra = MenuScreen.openMenuExtras(perfilAtual.extrasDesbloqueados);
 
                             if (optExtra == 1) {
-                                // O JogoController registra "FIM?" ao alcançar qualquer final
                                 if (perfilAtual.extrasDesbloqueados != null && perfilAtual.extrasDesbloqueados.contains("FIM?")) {
                                     colecionaveis.exibirConquistaFim();
                                 } else {
@@ -100,14 +100,14 @@ public class MenuController {
                                 }
                             }
                             else if (optExtra == 0) {
-                                noExtras = false; // Volta ao menu de colecionáveis
+                                noExtras = false;
                             }
                             else {
                                 MenuScreen.apresentaErro("Opção inválida.");
                             }
                         }
                     }
-                    else if (optCol == 0) { // Voltar ao Menu Principal
+                    else if (optCol == 0) {
                         noColecionaveis = false;
                     }
                     else {
@@ -116,10 +116,9 @@ public class MenuController {
                 }
             }
 
-            // INSTRUÇÕES
             if (option == 4) MenuScreen.Instrucoes();
 
-            // PREFERÊNCIAS (Configurações)
+            // Altera as cores e os modos de formatação do terminal, salvando as preferências no perfil.
             if (option == 5) {
                 boolean noConfig = true;
                 while (noConfig) {
@@ -170,10 +169,8 @@ public class MenuController {
                 }
             }
 
-            // CRÉDITOS
             if (option == 6) MenuScreen.Creditos();
 
-            // SAIR
             if (option == 7) return true;
         }
         return false;

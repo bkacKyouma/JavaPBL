@@ -18,17 +18,12 @@ import views.JogoView;
 import views.MenuView;
 import views.Terminal;
 
-
 // Coordena a partida: cria o conteúdo narrativo, aplica regras especiais e move o EstadoJogo entre as cenas.
 public class JogoController {
 
-    // Apenas declare as variáveis, sem dar 'new' aqui
     private JogoView jogoView;
     private MenuView menuView;
     private EstadoJogo estadoJogo;
-
-
-    // private EstadoJogo estadoJogo;
 
     // Referências dos personagens secundários usadas na criação dos diálogos e cenas.
     private Psecundario fauan;
@@ -48,13 +43,13 @@ public class JogoController {
 
     private final PersistenciaJogo persistencia = new PersistenciaJogo();
 
-    // ADICIONE ESTE CONSTRUTOR
+    // Inicializa as views da partida com as configurações de cor e modo ativas no menu.
     public JogoController(String corPrimaria, String corSecundaria, String modo) {
         this.jogoView = new JogoView(corPrimaria, corSecundaria, modo);
         this.menuView = new MenuView(corPrimaria, corSecundaria, modo);
     }
-    // Converte o temperamento, cria Katarina, monta a história e inicia o loop da partida.
 
+    // Converte o temperamento, cria Katarina, monta a história e inicia o loop da partida.
     public void iniciarJogo(int opcaoTemperamento) {
 
         brunoSobreviveu = false;
@@ -80,8 +75,7 @@ public class JogoController {
         executarJogo();
     }
 
-
-    // Lê o JSON, reconstrói a protagonista e volta à cena salva.
+    // Lê o JSON do slot informado, reconstrói a protagonista e retoma a partida da cena salva.
     public void carregarJogo(int slot) {
         try {
             DadosPartida dados = persistencia.carregar(slot);
@@ -109,7 +103,7 @@ public class JogoController {
         }
     }
 
-    // Permite salvar a cena atual em qualquer momento, sem avançar a história.
+    // Permite salvar a cena atual manualmente em um slot escolhido pelo jogador.
     private void salvarManual() {
         int slot = this.menuView.escolherSlot("SALVAR PARTIDA");
         if (slot == 0) return;
@@ -131,6 +125,8 @@ public class JogoController {
             this.jogoView.apresentaErro("Erro ao salvar: " + e.getMessage());
         }
     }
+
+    // Salva automaticamente o progresso no slot 1 após cada avanço de escolha.
     private void salvaAuto() {
         int slot = 1;
 
@@ -144,9 +140,7 @@ public class JogoController {
         }
     }
 
-
     // Converte a opção numérica do menu para a String de temperamento usada nas condições.
-
     private String converterTemperamento(int opcao) {
 
         if (opcao == 1) {
@@ -160,9 +154,7 @@ public class JogoController {
         return "SANGUE_QUENTE";
     }
 
-
     // Cria Fauan, Passos, Toin e Bruno e registra todos no EstadoJogo.
-
     private void criarPersonagens() {
 
         fauan = new Psecundario(2, "Fauan");
@@ -173,16 +165,13 @@ public class JogoController {
 
         bruno = new Psecundario(5, "Bruno");
 
-
         estadoJogo.adicionarPersonagem(fauan);
         estadoJogo.adicionarPersonagem(passos);
         estadoJogo.adicionarPersonagem(toin);
         estadoJogo.adicionarPersonagem(bruno);
     }
 
-
     // Instancia as pistas que podem ser obtidas ao longo dos capítulos.
-
     private void criarPistas() {
 
         pistaCheiroGasolina =
@@ -191,13 +180,11 @@ public class JogoController {
                         "Katarina lembra de um cheiro de gasolina antes da fumaça."
                 );
 
-
         pistaSombraDesconhecida =
                 new Pista(
                         "Sombra desconhecida",
                         "Katarina lembra de uma sombra próxima ao quarto de Bruno."
                 );
-
 
         pistaAmeacaBruno =
                 new Pista(
@@ -205,13 +192,11 @@ public class JogoController {
                         "Durante uma ligação, Toin disse algo sobre Bruno que deixou Katarina inquieta."
                 );
 
-
         pistaPerguntaAlarme =
                 new Pista(
                         "Pergunta sobre o alarme",
                         "Toin perguntou se o alarme de incêndio ainda funcionava."
                 );
-
 
         pistaAlarmeDesligado =
                 new Pista(
@@ -220,9 +205,7 @@ public class JogoController {
                 );
     }
 
-
     // Constrói os cinco capítulos antes de iniciar a navegação entre as cenas.
-
     private void construirHistoria() {
 
         construirCapitulo1();
@@ -232,11 +215,7 @@ public class JogoController {
         construirCapitulo5();
     }
 
-
-    // Centraliza a criação das escolhas para manter a ordem dos deltas igual à tabela do roteiro.
-
-    // Os parâmetros seguem a ordem da tabela: memória, confiança, vínculo, suspeita, estabilidade e culpa.
-    // definirEfeitos() recebe esses mesmos valores em outra ordem, por isso a reorganização abaixo.
+    // Cria uma escolha recebendo os deltas na ordem da tabela do roteiro e repassando para definirEfeitos().
     private Escolha criarEscolha(
             int id,
             String texto,
@@ -267,7 +246,7 @@ public class JogoController {
         return escolha;
     }
 
-
+    // Cria uma escolha padrão e associa o tom emocional correspondente à resposta.
     private Escolha criarEscolhaComTom(
             int id,
             String texto,
@@ -298,9 +277,7 @@ public class JogoController {
         return escolha;
     }
 
-
     // Capítulo 1: monta o primeiro interrogatório e as primeiras pistas sobre o incêndio.
-
     private void construirCapitulo1() {
 
         Capitulo capitulo =
@@ -309,9 +286,7 @@ public class JogoController {
                         "A NOITE QUE NÃO SE APAGA"
                 );
 
-
         // Cena 1: Fauan questiona a reação de Katarina durante a fuga do incêndio.
-
         Cena cena101 =
                 new Cena(
                         101,
@@ -322,7 +297,6 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
 
-
         cena101.adicionarDialogo(
                 new Dialogo(
                         fauan.getNome(),
@@ -331,8 +305,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
-
 
         Escolha c101a =
                 criarEscolha(
@@ -348,7 +320,6 @@ public class JogoController {
                         10
                 );
 
-
         Escolha c101b =
                 criarEscolha(
                         2,
@@ -363,10 +334,8 @@ public class JogoController {
                         -15
                 );
 
-
         cena101.adicionarEscolha(c101a);
         cena101.adicionarEscolha(c101b);
-
 
         Cena cena111 =
                 new Cena(
@@ -377,7 +346,6 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
 
-
         cena111.adicionarDialogo(
                 new Dialogo(
                         fauan.getNome(),
@@ -387,9 +355,7 @@ public class JogoController {
                 )
         );
 
-
         cena111.definirProximaCena(102);
-
 
         Cena cena112 =
                 new Cena(
@@ -400,7 +366,6 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
 
-
         cena112.adicionarDialogo(
                 new Dialogo(
                         fauan.getNome(),
@@ -410,12 +375,9 @@ public class JogoController {
                 )
         );
 
-
         cena112.definirProximaCena(102);
 
-
         // Cena 2: o interrogatório passa para a briga entre Katarina e Passos.
-
         Cena cena102 =
                 new Cena(
                         102,
@@ -423,7 +385,6 @@ public class JogoController {
                         "Fauan vira uma página do relatório.",
                         "INTERROGATORIO"
                 );
-
 
         cena102.adicionarDialogo(
                 new Dialogo(
@@ -433,7 +394,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         Escolha c102a =
                 criarEscolha(
@@ -450,7 +410,6 @@ public class JogoController {
                         5
                 );
 
-
         Escolha c102b =
                 criarEscolha(
                         2,
@@ -465,10 +424,8 @@ public class JogoController {
                         0
                 );
 
-
         cena102.adicionarEscolha(c102a);
         cena102.adicionarEscolha(c102b);
-
 
         Cena cena121 =
                 new Cena(
@@ -479,7 +436,6 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
 
-
         cena121.adicionarDialogo(
                 new Dialogo(
                         fauan.getNome(),
@@ -489,9 +445,7 @@ public class JogoController {
                 )
         );
 
-
         cena121.definirProximaCena(103);
-
 
         Cena cena122 =
                 new Cena(
@@ -502,7 +456,6 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
 
-
         cena122.adicionarDialogo(
                 new Dialogo(
                         fauan.getNome(),
@@ -512,12 +465,9 @@ public class JogoController {
                 )
         );
 
-
         cena122.definirProximaCena(103);
 
-
         // Cena 3: Fauan confronta Katarina sobre o resgate realizado por Toin.
-
         Cena cena103 =
                 new Cena(
                         103,
@@ -525,7 +475,6 @@ public class JogoController {
                         "Fauan observa Katarina por alguns segundos.",
                         "INTERROGATORIO"
                 );
-
 
         cena103.adicionarDialogo(
                 new Dialogo(
@@ -536,7 +485,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         Escolha c103a =
                 criarEscolha(
@@ -553,7 +501,6 @@ public class JogoController {
                         0
                 );
 
-
         Escolha c103b =
                 criarEscolha(
                         2,
@@ -568,10 +515,8 @@ public class JogoController {
                         0
                 );
 
-
         cena103.adicionarEscolha(c103a);
         cena103.adicionarEscolha(c103b);
-
 
         Cena cena131 =
                 new Cena(
@@ -582,7 +527,6 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
 
-
         cena131.adicionarDialogo(
                 new Dialogo(
                         fauan.getNome(),
@@ -592,9 +536,7 @@ public class JogoController {
                 )
         );
 
-
         cena131.definirProximaCena(104);
-
 
         Cena cena132 =
                 new Cena(
@@ -603,7 +545,6 @@ public class JogoController {
                         "Fauan repete mentalmente as palavras de Katarina.",
                         "INTERROGATORIO"
                 );
-
 
         cena132.adicionarDialogo(
                 new Dialogo(
@@ -614,12 +555,9 @@ public class JogoController {
                 )
         );
 
-
         cena132.definirProximaCena(104);
 
-
         // Cena 4: a lembrança do cheiro de gasolina pode virar uma pista da investigação.
-
         Cena cena104 =
                 new Cena(
                         104,
@@ -627,7 +565,6 @@ public class JogoController {
                         "A sala fica ainda mais silenciosa.",
                         "INTERROGATORIO"
                 );
-
 
         cena104.adicionarDialogo(
                 new Dialogo(
@@ -638,7 +575,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         Escolha c104a =
                 criarEscolha(
@@ -655,11 +591,9 @@ public class JogoController {
                         -5
                 );
 
-
         c104a.definirPistaGanha(
                 pistaCheiroGasolina
         );
-
 
         Escolha c104b =
                 criarEscolha(
@@ -675,10 +609,8 @@ public class JogoController {
                         10
                 );
 
-
         cena104.adicionarEscolha(c104a);
         cena104.adicionarEscolha(c104b);
-
 
         Cena cena141 =
                 new Cena(
@@ -689,7 +621,6 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
 
-
         cena141.adicionarDialogo(
                 new Dialogo(
                         fauan.getNome(),
@@ -699,9 +630,7 @@ public class JogoController {
                 )
         );
 
-
         cena141.definirProximaCena(105);
-
 
         Cena cena142 =
                 new Cena(
@@ -710,7 +639,6 @@ public class JogoController {
                         "Fauan não parece convencido.",
                         "INTERROGATORIO"
                 );
-
 
         cena142.adicionarDialogo(
                 new Dialogo(
@@ -721,12 +649,9 @@ public class JogoController {
                 )
         );
 
-
         cena142.definirProximaCena(105);
 
-
         // Cena 5: Katarina relata o que viu antes da fumaça e pode confrontar Toin se cumprir as condições.
-
         Cena cena105 =
                 new Cena(
                         105,
@@ -734,7 +659,6 @@ public class JogoController {
                         "Fauan fecha parcialmente a pasta.",
                         "INTERROGATORIO"
                 );
-
 
         cena105.adicionarDialogo(
                 new Dialogo(
@@ -745,7 +669,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         Escolha c105a =
                 criarEscolha(
@@ -762,11 +685,9 @@ public class JogoController {
                         0
                 );
 
-
         c105a.definirPistaGanha(
                 pistaSombraDesconhecida
         );
-
 
         Escolha c105b =
                 criarEscolha(
@@ -782,7 +703,6 @@ public class JogoController {
                         10,
                         0
                 );
-
 
         // A terceira opção só aparece quando a suspeita de Toin e a pista exigida já foram alcançadas.
         Escolha c105c =
@@ -800,23 +720,19 @@ public class JogoController {
                         -20
                 );
 
-
         c105c.definirCondicao(
                 "Toin",
                 65,
                 null
         );
 
-
         c105c.adicionarPistaNecessaria(
                 "Cheiro de gasolina"
         );
 
-
         cena105.adicionarEscolha(c105a);
         cena105.adicionarEscolha(c105b);
         cena105.adicionarEscolha(c105c);
-
 
         Cena cena106 =
                 new Cena(
@@ -827,12 +743,9 @@ public class JogoController {
                         "NARRATIVA"
                 );
 
-
         cena106.definirProximaCena(201);
 
-
         // Registra todas as cenas do capítulo na ordem em que podem ser buscadas pelo EstadoJogo.
-
         capitulo.adicionarCena(cena101);
         capitulo.adicionarCena(cena111);
         capitulo.adicionarCena(cena112);
@@ -852,13 +765,10 @@ public class JogoController {
         capitulo.adicionarCena(cena105);
         capitulo.adicionarCena(cena106);
 
-
         estadoJogo.adicionarCapitulo(capitulo);
     }
 
-
     // Capítulo 2: monta os flashbacks dos três dias anteriores e aplica escolhas com tom.
-
     private void construirCapitulo2() {
 
         Capitulo capitulo =
@@ -867,9 +777,7 @@ public class JogoController {
                         "TRÊS DIAS ANTES"
                 );
 
-
         // Cena 1: as visitas inesperadas de Toin introduzem a mecânica de tom deste capítulo.
-
         Cena cena201 =
                 new Cena(
                         201,
@@ -879,7 +787,6 @@ public class JogoController {
                         "FLASHBACK"
                 );
 
-
         cena201.adicionarDialogo(
                 new Dialogo(
                         fauan.getNome(),
@@ -888,7 +795,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         Escolha c201a =
                 criarEscolhaComTom(
@@ -907,7 +813,6 @@ public class JogoController {
                         "SANGUE_FRIO"
                 );
 
-
         Escolha c201b =
                 criarEscolhaComTom(
                         2,
@@ -924,7 +829,6 @@ public class JogoController {
 
                         "EQUILIBRADO"
                 );
-
 
         Escolha c201c =
                 criarEscolhaComTom(
@@ -943,14 +847,11 @@ public class JogoController {
                         "SANGUE_QUENTE"
                 );
 
-
         cena201.adicionarEscolha(c201a);
         cena201.adicionarEscolha(c201b);
         cena201.adicionarEscolha(c201c);
 
-
         // Cena 2: a lembrança do perfume evidencia a traição de Passos.
-
         Cena cena202 =
                 new Cena(
                         202,
@@ -960,7 +861,6 @@ public class JogoController {
                         "FLASHBACK"
                 );
 
-
         cena202.adicionarDialogo(
                 new Dialogo(
                         fauan.getNome(),
@@ -968,7 +868,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         Escolha c202a =
                 criarEscolhaComTom(
@@ -987,7 +886,6 @@ public class JogoController {
                         "SANGUE_FRIO"
                 );
 
-
         Escolha c202b =
                 criarEscolhaComTom(
                         2,
@@ -1004,7 +902,6 @@ public class JogoController {
 
                         "EQUILIBRADO"
                 );
-
 
         Escolha c202c =
                 criarEscolhaComTom(
@@ -1024,14 +921,11 @@ public class JogoController {
                         "SANGUE_QUENTE"
                 );
 
-
         cena202.adicionarEscolha(c202a);
         cena202.adicionarEscolha(c202b);
         cena202.adicionarEscolha(c202c);
 
-
         // Cena 3: a ligação de Toin pode liberar uma escolha exclusiva de sangue frio.
-
         Cena cena203 =
                 new Cena(
                         203,
@@ -1041,7 +935,6 @@ public class JogoController {
                         "FLASHBACK"
                 );
 
-
         cena203.adicionarDialogo(
                 new Dialogo(
                         fauan.getNome(),
@@ -1050,7 +943,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         Escolha c203a =
                 criarEscolhaComTom(
@@ -1069,7 +961,6 @@ public class JogoController {
                         "SANGUE_FRIO"
                 );
 
-
         Escolha c203b =
                 criarEscolhaComTom(
                         2,
@@ -1086,7 +977,6 @@ public class JogoController {
 
                         "EQUILIBRADO"
                 );
-
 
         Escolha c203c =
                 criarEscolhaComTom(
@@ -1105,7 +995,6 @@ public class JogoController {
                         "SANGUE_QUENTE"
                 );
 
-
         Escolha c203d =
                 criarEscolha(
                         4,
@@ -1122,7 +1011,6 @@ public class JogoController {
                         -10
                 );
 
-
         // Usa exatamente "SANGUE_FRIO" porque a condição compara essa String com o temperamento da protagonista.
         c203d.definirCondicao(
                 "Toin",
@@ -1130,20 +1018,16 @@ public class JogoController {
                 "SANGUE_FRIO"
         );
 
-
         c203d.definirPistaGanha(
                 pistaAmeacaBruno
         );
-
 
         cena203.adicionarEscolha(c203a);
         cena203.adicionarEscolha(c203b);
         cena203.adicionarEscolha(c203c);
         cena203.adicionarEscolha(c203d);
 
-
         // Encerra o capítulo 2 e encaminha automaticamente para o capítulo 3.
-
         Cena cena204 =
                 new Cena(
                         204,
@@ -1151,7 +1035,6 @@ public class JogoController {
                         "Fauan larga a caneta na mesa.",
                         "INTERROGATORIO"
                 );
-
 
         cena204.adicionarDialogo(
                 new Dialogo(
@@ -1163,22 +1046,17 @@ public class JogoController {
                 )
         );
 
-
         cena204.definirProximaCena(301);
-
 
         capitulo.adicionarCena(cena201);
         capitulo.adicionarCena(cena202);
         capitulo.adicionarCena(cena203);
         capitulo.adicionarCena(cena204);
 
-
         estadoJogo.adicionarCapitulo(capitulo);
     }
 
-
     // Capítulo 3: mostra a origem da relação entre Passos e Toin sem participação de Fauan.
-
     private void construirCapitulo3() {
 
         Capitulo capitulo =
@@ -1186,7 +1064,6 @@ public class JogoController {
                         3,
                         "ORIGEM: DOIS MENINOS"
                 );
-
 
         Cena cena301 =
                 new Cena(
@@ -1197,7 +1074,6 @@ public class JogoController {
                         "FLASHBACK"
                 );
 
-
         cena301.adicionarDialogo(
                 new Dialogo(
                         passos.getNome(),
@@ -1206,7 +1082,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         cena301.adicionarDialogo(
                 new Dialogo(
@@ -1218,10 +1093,7 @@ public class JogoController {
                 )
         );
 
-
         // Não usa definirTom() porque Fauan não participa deste flashback; o ajuste de estabilidade é feito no Controller.
-
-
         Escolha c301a =
                 criarEscolha(
                         1,
@@ -1236,7 +1108,6 @@ public class JogoController {
                         0,
                         0
                 );
-
 
         Escolha c301b =
                 criarEscolha(
@@ -1253,7 +1124,6 @@ public class JogoController {
                         0
                 );
 
-
         Escolha c301c =
                 criarEscolha(
                         3,
@@ -1269,11 +1139,9 @@ public class JogoController {
                         0
                 );
 
-
         cena301.adicionarEscolha(c301a);
         cena301.adicionarEscolha(c301b);
         cena301.adicionarEscolha(c301c);
-
 
         Cena cena302 =
                 new Cena(
@@ -1285,7 +1153,6 @@ public class JogoController {
                         "FLASHBACK"
                 );
 
-
         cena302.adicionarDialogo(
                 new Dialogo(
                         toin.getNome(),
@@ -1295,20 +1162,15 @@ public class JogoController {
                 )
         );
 
-
         cena302.definirProximaCena(401);
-
 
         capitulo.adicionarCena(cena301);
         capitulo.adicionarCena(cena302);
 
-
         estadoJogo.adicionarCapitulo(capitulo);
     }
 
-
     // Capítulo 4: concentra as suspeitas sobre Toin, a paternidade e as pistas do alarme.
-
     private void construirCapitulo4() {
 
         Capitulo capitulo =
@@ -1317,9 +1179,7 @@ public class JogoController {
                         "O QUEIXO DO TOIN"
                 );
 
-
         // Cena 1: a fala de Passos sobre Bruno aumenta o conflito em torno de Toin.
-
         Cena cena401 =
                 new Cena(
                         401,
@@ -1330,7 +1190,6 @@ public class JogoController {
                         "FLASHBACK"
                 );
 
-
         cena401.adicionarDialogo(
                 new Dialogo(
                         passos.getNome(),
@@ -1338,7 +1197,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         cena401.adicionarDialogo(
                 new Dialogo(
@@ -1348,7 +1206,6 @@ public class JogoController {
                 )
         );
 
-
         cena401.adicionarDialogo(
                 new Dialogo(
                         fauan.getNome(),
@@ -1356,7 +1213,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         Escolha c401a =
                 criarEscolhaComTom(
@@ -1375,7 +1231,6 @@ public class JogoController {
                         "SANGUE_FRIO"
                 );
 
-
         Escolha c401b =
                 criarEscolhaComTom(
                         2,
@@ -1392,7 +1247,6 @@ public class JogoController {
 
                         "EQUILIBRADO"
                 );
-
 
         Escolha c401c =
                 criarEscolhaComTom(
@@ -1411,7 +1265,6 @@ public class JogoController {
                         "SANGUE_QUENTE"
                 );
 
-
         Escolha c401d =
                 criarEscolha(
                         4,
@@ -1428,22 +1281,18 @@ public class JogoController {
                         -5
                 );
 
-
         c401d.definirCondicao(
                 "Passos",
                 65,
                 null
         );
 
-
         cena401.adicionarEscolha(c401a);
         cena401.adicionarEscolha(c401b);
         cena401.adicionarEscolha(c401c);
         cena401.adicionarEscolha(c401d);
 
-
         // Cena 2: a resposta de Katarina define sua postura sobre a paternidade.
-
         Cena cena402 =
                 new Cena(
                         402,
@@ -1453,7 +1302,6 @@ public class JogoController {
                         "FLASHBACK"
                 );
 
-
         cena402.adicionarDialogo(
                 new Dialogo(
                         passos.getNome(),
@@ -1462,7 +1310,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         Escolha c402a =
                 criarEscolha(
@@ -1479,11 +1326,9 @@ public class JogoController {
                         -20
                 );
 
-
         c402a.definirPosturaResultante(
                 "NEGACAO_TOTAL"
         );
-
 
         Escolha c402b =
                 criarEscolha(
@@ -1500,18 +1345,14 @@ public class JogoController {
                         15
                 );
 
-
         c402b.definirPosturaResultante(
                 "DUVIDA_ABERTA"
         );
 
-
         cena402.adicionarEscolha(c402a);
         cena402.adicionarEscolha(c402b);
 
-
         // Cena 3: a pergunta de Toin sobre o alarme pode gerar uma nova pista.
-
         Cena cena403 =
                 new Cena(
                         403,
@@ -1520,7 +1361,6 @@ public class JogoController {
                                 + "se o alarme de incêndio ainda funcionava.",
                         "FLASHBACK"
                 );
-
 
         cena403.adicionarDialogo(
                 new Dialogo(
@@ -1531,9 +1371,7 @@ public class JogoController {
                 )
         );
 
-
         // As opções A e C deixam o delta de suspeita em 0 aqui; o bônus só é aplicado se a suspeita anterior já for >= 50.
-
         Escolha c403a =
                 criarEscolhaComTom(
                         1,
@@ -1550,7 +1388,6 @@ public class JogoController {
 
                         "SANGUE_FRIO"
                 );
-
 
         Escolha c403b =
                 criarEscolhaComTom(
@@ -1569,7 +1406,6 @@ public class JogoController {
                         "EQUILIBRADO"
                 );
 
-
         Escolha c403c =
                 criarEscolhaComTom(
                         3,
@@ -1587,14 +1423,11 @@ public class JogoController {
                         "SANGUE_QUENTE"
                 );
 
-
         cena403.adicionarEscolha(c403a);
         cena403.adicionarEscolha(c403b);
         cena403.adicionarEscolha(c403c);
 
-
         // Cena 4: o laudo revela que o alarme foi desligado manualmente e permite uma acusação condicionada.
-
         Cena cena404 =
                 new Cena(
                         404,
@@ -1602,7 +1435,6 @@ public class JogoController {
                         "Fauan revela o resultado da perícia.",
                         "INTERROGATORIO"
                 );
-
 
         cena404.adicionarDialogo(
                 new Dialogo(
@@ -1614,7 +1446,6 @@ public class JogoController {
                 )
         );
 
-
         cena404.adicionarDialogo(
                 new Dialogo(
                         fauan.getNome(),
@@ -1624,7 +1455,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         Escolha c404a =
                 criarEscolha(
@@ -1641,7 +1471,6 @@ public class JogoController {
                         0
                 );
 
-
         Escolha c404b =
                 criarEscolha(
                         2,
@@ -1657,7 +1486,6 @@ public class JogoController {
                         -10
                 );
 
-
         Escolha c404c =
                 criarEscolha(
                         3,
@@ -1672,28 +1500,23 @@ public class JogoController {
                         5
                 );
 
-
         c404c.definirCondicao(
                 "Toin",
                 70,
                 null
         );
 
-
         c404c.adicionarPistaNecessaria(
                 "Pergunta sobre o alarme"
         );
-
 
         c404c.adicionarPistaNecessaria(
                 "Alarme desligado manualmente"
         );
 
-
         cena404.adicionarEscolha(c404a);
         cena404.adicionarEscolha(c404b);
         cena404.adicionarEscolha(c404c);
-
 
         Cena cena405 =
                 new Cena(
@@ -1704,9 +1527,7 @@ public class JogoController {
                         "NARRATIVA"
                 );
 
-
         cena405.definirProximaCena(501);
-
 
         capitulo.adicionarCena(cena401);
         capitulo.adicionarCena(cena402);
@@ -1714,13 +1535,10 @@ public class JogoController {
         capitulo.adicionarCena(cena404);
         capitulo.adicionarCena(cena405);
 
-
         estadoJogo.adicionarCapitulo(capitulo);
     }
 
-
     // Capítulo 5: reúne os personagens, define o destino de Bruno e prepara o veredito.
-
     private void construirCapitulo5() {
 
         Capitulo capitulo =
@@ -1729,9 +1547,7 @@ public class JogoController {
                         "O VEREDITO"
                 );
 
-
         // Cena 1: Toin apresenta sua defesa e pode ser confrontado com as pistas do alarme.
-
         Cena cena501 =
                 new Cena(
                         501,
@@ -1740,7 +1556,6 @@ public class JogoController {
                                 + "estão juntos pela primeira vez.",
                         "INTERROGATORIO"
                 );
-
 
         cena501.adicionarDialogo(
                 new Dialogo(
@@ -1751,7 +1566,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         Escolha c501a =
                 criarEscolhaComTom(
@@ -1770,7 +1584,6 @@ public class JogoController {
                         "SANGUE_FRIO"
                 );
 
-
         Escolha c501b =
                 criarEscolhaComTom(
                         2,
@@ -1787,7 +1600,6 @@ public class JogoController {
 
                         "EQUILIBRADO"
                 );
-
 
         Escolha c501c =
                 criarEscolhaComTom(
@@ -1806,7 +1618,6 @@ public class JogoController {
                         "SANGUE_QUENTE"
                 );
 
-
         Escolha c501d =
                 criarEscolha(
                         4,
@@ -1824,32 +1635,26 @@ public class JogoController {
                         0
                 );
 
-
         c501d.definirCondicao(
                 "Toin",
                 70,
                 null
         );
 
-
         c501d.adicionarPistaNecessaria(
                 "Pergunta sobre o alarme"
         );
 
-
         c501d.adicionarPistaNecessaria(
                 "Alarme desligado manualmente"
         );
-
 
         cena501.adicionarEscolha(c501a);
         cena501.adicionarEscolha(c501b);
         cena501.adicionarEscolha(c501c);
         cena501.adicionarEscolha(c501d);
 
-
         // Cena 2: as respostas a Passos dependem da postura de paternidade definida no capítulo anterior.
-
         Cena cena502 =
                 new Cena(
                         502,
@@ -1857,7 +1662,6 @@ public class JogoController {
                         "Passos tenta se explicar diante de todos.",
                         "INTERROGATORIO"
                 );
-
 
         cena502.adicionarDialogo(
                 new Dialogo(
@@ -1868,10 +1672,7 @@ public class JogoController {
                 )
         );
 
-
         // As quatro respostas desta cena usam os mesmos deltas; o que muda é a postura necessária para liberá-las.
-
-
         Escolha c502a =
                 criarEscolha(
                         1,
@@ -1887,11 +1688,9 @@ public class JogoController {
                         -10
                 );
 
-
         c502a.definirPosturaNecessaria(
                 "NEGACAO_TOTAL"
         );
-
 
         Escolha c502b =
                 criarEscolha(
@@ -1908,11 +1707,9 @@ public class JogoController {
                         -10
                 );
 
-
         c502b.definirPosturaNecessaria(
                 "NEGACAO_TOTAL"
         );
-
 
         Escolha c502c =
                 criarEscolha(
@@ -1929,11 +1726,9 @@ public class JogoController {
                         -10
                 );
 
-
         c502c.definirPosturaNecessaria(
                 "DUVIDA_ABERTA"
         );
-
 
         Escolha c502d =
                 criarEscolha(
@@ -1950,20 +1745,16 @@ public class JogoController {
                         -10
                 );
 
-
         c502d.definirPosturaNecessaria(
                 "DUVIDA_ABERTA"
         );
-
 
         cena502.adicionarEscolha(c502a);
         cena502.adicionarEscolha(c502b);
         cena502.adicionarEscolha(c502c);
         cena502.adicionarEscolha(c502d);
 
-
         // A cena 503 não é exibida; serve apenas para decidir qual versão da memória será usada.
-
         Cena cena503 =
                 new Cena(
                         503,
@@ -1972,9 +1763,7 @@ public class JogoController {
                         "CONTROLE"
                 );
 
-
         // Memória >= 85 leva à versão nítida da lembrança.
-
         Cena cena531 =
                 new Cena(
                         531,
@@ -1982,7 +1771,6 @@ public class JogoController {
                         "A cena se abre nítida, sem lacunas.",
                         "MEMORIA"
                 );
-
 
         cena531.adicionarDialogo(
                 new Dialogo(
@@ -1992,7 +1780,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         Escolha c531a =
                 criarEscolha(
@@ -2008,7 +1795,6 @@ public class JogoController {
                         0
                 );
 
-
         Escolha c531b =
                 criarEscolha(
                         2,
@@ -2023,13 +1809,10 @@ public class JogoController {
                         0
                 );
 
-
         cena531.adicionarEscolha(c531a);
         cena531.adicionarEscolha(c531b);
 
-
         // Memória < 85 leva à versão fragmentada da lembrança.
-
         Cena cena532 =
                 new Cena(
                         532,
@@ -2037,7 +1820,6 @@ public class JogoController {
                         "A lembrança ainda possui lacunas.",
                         "MEMORIA"
                 );
-
 
         cena532.adicionarDialogo(
                 new Dialogo(
@@ -2047,7 +1829,6 @@ public class JogoController {
                         "FALA"
                 )
         );
-
 
         Escolha c532a =
                 criarEscolha(
@@ -2063,7 +1844,6 @@ public class JogoController {
                         0
                 );
 
-
         Escolha c532b =
                 criarEscolha(
                         2,
@@ -2078,13 +1858,10 @@ public class JogoController {
                         0
                 );
 
-
         cena532.adicionarEscolha(c532a);
         cena532.adicionarEscolha(c532b);
 
-
         // A cena 504 não tem escolha e dispara o cálculo do veredito no loop principal.
-
         Cena cena504 =
                 new Cena(
                         504,
@@ -2095,9 +1872,7 @@ public class JogoController {
                         "FINAL"
                 );
 
-
-        // Identifica as cenas finais e devolve o nome interno correspondente ao final alcançado.
-
+        // Instancia as quatro cenas de desfecho possíveis da investigação.
         Cena final591 =
                 new Cena(
                         591,
@@ -2106,7 +1881,6 @@ public class JogoController {
                                 + "A investigação leva ao indiciamento de Toin.",
                         "FINAL"
                 );
-
 
         Cena final592 =
                 new Cena(
@@ -2117,7 +1891,6 @@ public class JogoController {
                         "FINAL"
                 );
 
-
         Cena final593 =
                 new Cena(
                         593,
@@ -2127,7 +1900,6 @@ public class JogoController {
                         "FINAL"
                 );
 
-
         Cena final594 =
                 new Cena(
                         594,
@@ -2136,7 +1908,6 @@ public class JogoController {
                                 + "Ao final da investigação, Katarina é indiciada.",
                         "FINAL"
                 );
-
 
         capitulo.adicionarCena(cena501);
         capitulo.adicionarCena(cena502);
@@ -2153,13 +1924,10 @@ public class JogoController {
         capitulo.adicionarCena(final593);
         capitulo.adicionarCena(final594);
 
-
         estadoJogo.adicionarCapitulo(capitulo);
     }
 
-
     // Exibe a cena atual, filtra escolhas válidas, aplica consequências e avança a partida.
-
     private void executarJogo() {
 
         while (!estadoJogo.isJogoEncerrado()) {
@@ -2170,7 +1938,6 @@ public class JogoController {
             Protagonista protagonista =
                     estadoJogo.getProtagonista();
 
-
             if (cenaAtual == null) {
 
                 this.jogoView.apresentaErro(
@@ -2180,9 +1947,7 @@ public class JogoController {
                 break;
             }
 
-
             // A cena 503 apenas escolhe qual versão da lembrança será exibida conforme a memória acumulada.
-
             if (cenaAtual.getId() == 503) {
 
                 if (protagonista.getMemoria() >= 85) {
@@ -2197,25 +1962,21 @@ public class JogoController {
                 continue;
             }
 
-
             processarEventoAoEntrarNaCena(
                     cenaAtual,
                     protagonista
             );
-
 
             List<Escolha> escolhasDisponiveis =
                     cenaAtual.getEscolhasDisponiveis(
                             protagonista
                     );
 
-
             int opcaoEscolhida =
                     this.jogoView.mostrarCena(
                             cenaAtual,
                             escolhasDisponiveis
                     );
-
 
             // Trata salvar/voltar ao menu antes das regras de avanço da cena.
             if (opcaoEscolhida == -2) {
@@ -2233,11 +1994,8 @@ public class JogoController {
                 continue;
             }
 
-
             // Cenas sem escolhas podem avançar automaticamente, calcular o veredito ou encerrar o jogo.
-
             if (escolhasDisponiveis.isEmpty()) {
-
 
                 if (cenaAtual.getId() == 504) {
 
@@ -2248,19 +2006,17 @@ public class JogoController {
                     continue;
                 }
 
-
                 if (ehCenaFinal(
                         cenaAtual.getId()
                 )) {
 
                     String finalAlcancado = nomeDoFinal(cenaAtual.getId());
 
-
-                    // Registra a conquista na PersistenciaGlobal
+                    // Salva o desfecho alcançado e os extras correspondentes no perfil global.
                     persistence.PersistenciaGlobal persistenciaG = new persistence.PersistenciaGlobal();
                     models.DadosGlobais perfil = persistenciaG.carregar();
                     perfil.registrarFinal(finalAlcancado);
-                    if(!perfil.extrasDesbloqueados.contains("FIM"))
+                    if (!perfil.extrasDesbloqueados.contains("FIM"))
                         perfil.registrarExtra("FIM?");
                     if (finalAlcancado.contains("BRUNO_MORTO"))
                         perfil.registrarExtra("BRINQUEDO_BRUNO");
@@ -2276,10 +2032,8 @@ public class JogoController {
                     continue;
                 }
 
-
                 int proximaCena =
                         cenaAtual.getProximaCenaId();
-
 
                 if (proximaCena != -1) {
 
@@ -2287,7 +2041,6 @@ public class JogoController {
                             estadoJogo.irParaCena(
                                     proximaCena
                             );
-
 
                     if (!encontrou) {
 
@@ -2300,19 +2053,15 @@ public class JogoController {
                         break;
                     }
 
-
                     continue;
                 }
-
 
                 estadoJogo.encerrarJogo("FIM");
 
                 continue;
             }
 
-
             // Garante que o número digitado corresponda a uma escolha realmente exibida ao jogador.
-
             if (opcaoEscolhida < 1
                     || opcaoEscolhida > escolhasDisponiveis.size()) {
 
@@ -2323,32 +2072,24 @@ public class JogoController {
                 continue;
             }
 
-
             Escolha escolha =
                     escolhasDisponiveis.get(
                             opcaoEscolhida - 1
                     );
 
-
             // Executa regras que dependem dos atributos antes de aplicar os deltas da escolha.
-
             processarConsequenciaEspecialAntesDaEscolha(
                     cenaAtual,
                     escolha,
                     protagonista
             );
 
-
             // Aplica os deltas, pistas, postura e regra de tom definidos na própria Escolha.
-
             escolha.aplicarConsequencias(
                     protagonista
             );
 
-
-            // Capítulo 3: mostra a origem da relação entre Passos e Toin sem participação de Fauan.
-            // No capítulo 3, o tom altera somente a estabilidade porque Fauan não está presente.
-
+            // No capítulo 3, o tom altera somente a estabilidade porque Fauan não participa do flashback.
             if (cenaAtual.getId() == 301) {
 
                 aplicarTomCapitulo3(
@@ -2357,12 +2098,10 @@ public class JogoController {
                 );
             }
 
-
             boolean encontrou =
                     estadoJogo.irParaCena(
                             escolha.getProximaCenaId()
                     );
-
 
             if (!encontrou) {
 
@@ -2376,13 +2115,10 @@ public class JogoController {
         }
     }
 
-
     // Aplica consequências que acontecem ao entrar em uma cena, sem depender de uma escolha.
-
     private void processarEventoAoEntrarNaCena(
             Cena cenaAtual,
             Protagonista protagonista) {
-
 
         // Ao entrar na cena 404, adiciona automaticamente a pista do laudo se Katarina ainda não a possuir.
         if (cenaAtual.getId() == 404
@@ -2396,29 +2132,21 @@ public class JogoController {
         }
     }
 
-
     // Trata condições cujo resultado depende do estado da protagonista antes da escolha.
-
     private void processarConsequenciaEspecialAntesDaEscolha(
             Cena cenaAtual,
             Escolha escolha,
             Protagonista protagonista) {
 
-
-        // Na cena 403, a suspeita precisa ser verificada antes dos deltas para decidir se a pista é obtida.
-
-        // Guarda a suspeita anterior porque a pista e o bônus só valem se ela já era >= 50 antes da escolha.
+        // Na cena 403, verifica se a suspeita já era >= 50 antes da escolha para conceder o bônus e a pista.
         if (cenaAtual.getId() == 403) {
 
             int suspeitaAntes =
                     protagonista.getSuspeitaToin();
 
-
             if (suspeitaAntes >= 50) {
 
-
                 // A opção A acrescenta 10 de suspeita e registra a pista do alarme.
-
                 if (escolha.getId() == 1) {
 
                     protagonista.ajustarSuspeitaToin(
@@ -2435,9 +2163,7 @@ public class JogoController {
                     }
                 }
 
-
                 // A opção C acrescenta 15 de suspeita e registra a mesma pista do alarme.
-
                 if (escolha.getId() == 3) {
 
                     protagonista.ajustarSuspeitaToin(
@@ -2456,12 +2182,9 @@ public class JogoController {
             }
         }
 
-
         // Nas cenas 531 e 532, a opção escolhida usa estabilidade ou vínculo para definir se Bruno sobrevive.
-
         if (cenaAtual.getId() == 531
                 || cenaAtual.getId() == 532) {
-
 
             // Na opção A, Bruno sobrevive somente se a estabilidade já for >= 55.
             if (escolha.getId() == 1) {
@@ -2471,7 +2194,6 @@ public class JogoController {
                                 .getEstabilidadeEmocional()
                                 >= 55;
             }
-
 
             // Na opção B, Bruno sobrevive somente se o vínculo com Passos já for >= 60.
             if (escolha.getId() == 2) {
@@ -2484,35 +2206,27 @@ public class JogoController {
         }
     }
 
-
-    // Compara a resposta da cena 301 com o temperamento sem alterar a confiança em Fauan.
-
-    // Se o tom combina com o temperamento, soma 5 de estabilidade; caso contrário, subtrai 5.
-    // Como Fauan não está no flashback, essa regra não altera a confiança nele.
+    // Ajusta a estabilidade em +5 ou -5 conforme o temperamento da protagonista, sem alterar a confiança em Fauan.
     private void aplicarTomCapitulo3(
             Escolha escolha,
             Protagonista protagonista) {
 
         String tomEscolhido = "";
 
-
         if (escolha.getId() == 1) {
 
             tomEscolhido = "SANGUE_FRIO";
         }
-
 
         if (escolha.getId() == 2) {
 
             tomEscolhido = "EQUILIBRADO";
         }
 
-
         if (escolha.getId() == 3) {
 
             tomEscolhido = "SANGUE_QUENTE";
         }
-
 
         if (tomEscolhido.equals(
                 protagonista.getTemperamento()
@@ -2530,17 +2244,12 @@ public class JogoController {
         }
     }
 
-
     // Calcula a credibilidade de Toin e usa esse valor para escolher uma das quatro cenas finais.
-
     private void redirecionarParaFinal(
             Protagonista protagonista) {
 
-
         // Conta as pistas ligadas diretamente ao alarme para calcular a credibilidade de Toin.
-
         int quantidadePistasContraToin = 0;
-
 
         if (protagonista.possuiPista(
                 "Pergunta sobre o alarme"
@@ -2549,7 +2258,6 @@ public class JogoController {
             quantidadePistasContraToin++;
         }
 
-
         if (protagonista.possuiPista(
                 "Alarme desligado manualmente"
         )) {
@@ -2557,30 +2265,24 @@ public class JogoController {
             quantidadePistasContraToin++;
         }
 
-
         int credibilidadeToin =
                 100
                         - protagonista.getSuspeitaToin()
                         - (5 * quantidadePistasContraToin);
 
-
         if (credibilidadeToin < 0) {
             credibilidadeToin = 0;
         }
-
 
         if (credibilidadeToin > 100) {
             credibilidadeToin = 100;
         }
 
-
         boolean toinIndiciado =
                 protagonista.getConfiancaFauan()
                         >= credibilidadeToin;
 
-
         int cenaFinal;
-
 
         if (toinIndiciado && brunoSobreviveu) {
 
@@ -2599,15 +2301,12 @@ public class JogoController {
             cenaFinal = 594;
         }
 
-
         estadoJogo.irParaCena(
                 cenaFinal
         );
     }
 
-
-    // Identifica as cenas finais e devolve o nome interno correspondente ao final alcançado.
-
+    // Verifica se o ID informado pertence a uma das quatro cenas de encerramento.
     private boolean ehCenaFinal(int idCena) {
 
         return idCena == 591
@@ -2616,7 +2315,7 @@ public class JogoController {
                 || idCena == 594;
     }
 
-
+    // Devolve a chave interna correspondente ao final alcançado.
     private String nomeDoFinal(int idCena) {
 
         if (idCena == 591) {
@@ -2624,18 +2323,15 @@ public class JogoController {
             return "FINAL_TOIN_INDICIADO_BRUNO_VIVO";
         }
 
-
         if (idCena == 592) {
 
             return "FINAL_TOIN_INDICIADO_BRUNO_MORTO";
         }
 
-
         if (idCena == 593) {
 
             return "FINAL_KATARINA_INDICIADA_BRUNO_VIVO";
         }
-
 
         return "FINAL_KATARINA_INDICIADA_BRUNO_MORTO";
     }
