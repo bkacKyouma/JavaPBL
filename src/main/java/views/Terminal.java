@@ -1,5 +1,6 @@
 package views;
 
+// Centraliza as constantes de formatação ANSI e os utilitários de controle do console.
 public class Terminal {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BOLD = "\u001B[1m";
@@ -12,6 +13,7 @@ public class Terminal {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_RED = "\u001B[31m";
 
+    // Identifica o sistema operacional e executa o comando nativo para limpar a tela do terminal.
     public static void limpaTerminal(){
         try {
             String SO = System.getProperty("os.name");
@@ -28,6 +30,7 @@ public class Terminal {
         }
     }
 
+    // Pausa a execução da thread atual pelo tempo especificado em milissegundos.
     public static void aplicaDelay(int x){
         try {
             Thread.sleep(x);

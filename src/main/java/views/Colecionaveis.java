@@ -2,6 +2,7 @@ package views;
 
 import java.util.Scanner;
 
+// Renderiza as artes ASCII e os textos dos conteúdos desbloqueáveis.
 public class Colecionaveis {
 
     private final Scanner scanner = new Scanner(System.in);
@@ -9,6 +10,7 @@ public class Colecionaveis {
     private final String corDestaque = Terminal.ANSI_YELLOW;
     private final String corTexto = Terminal.ANSI_GREEN;
 
+    // Exibe o colecionável desbloqueado ao concluir a história pela primeira vez.
     public void exibirConquistaFim() {
         Terminal.limpaTerminal();
 
@@ -55,6 +57,7 @@ public class Colecionaveis {
         scanner.nextLine();
     }
 
+    // Exibe o colecionável referente ao brinquedo de Bruno e aguarda ENTER para retornar.
     public void exibirConquistaBruno() {
         Terminal.limpaTerminal();
 

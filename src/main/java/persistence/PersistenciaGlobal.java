@@ -45,7 +45,7 @@ public class PersistenciaGlobal {
         try {
             DadosGlobais dados = mapper.readValue(caminhoArquivo.toFile(), DadosGlobais.class);
 
-            // Validação simples de integridade parecida com a que você usou no DadosPartida
+            // Validação de integridade
             if (dados == null || dados.versao != 1 || dados.corPrimaria == null) {
                 return DadosGlobais.criarPadrao(Terminal.ANSI_GREEN, Terminal.ANSI_YELLOW, "");
             }

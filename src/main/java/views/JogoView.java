@@ -10,12 +10,11 @@ import java.util.Scanner;
 // Exibe a cena atual e devolve ao Controller a opção escolhida pelo jogador.
 public class JogoView {
 
-    // Mantém um único Scanner para ler as entradas durante toda a partida.
     private final Scanner scanner = new Scanner(System.in);
 
-    // Atributos de formatação
+    // Estado atual da formatação ANSI aplicada nas telas da partida.
     private String corPrimaria;
-    private String corSecundaria; // Personagens ou Destaques
+    private String corSecundaria;
     private String modo;
     private final String reset = Terminal.ANSI_RESET;
 
@@ -25,47 +24,46 @@ public class JogoView {
         this.modo = modo;
     }
 
+    // Envolve o texto padrão com a cor primária e o modo ativos.
     private String formatar(String texto) {
         return modo + corPrimaria + texto + reset;
     }
 
+    // Envolve títulos, cabeçalhos e nomes de personagens com a cor secundária.
     private String formatarDestaque(String texto) {
         return modo + corSecundaria + texto + reset;
     }
 
-    // Recebe a cena e apenas as escolhas que já passaram pelas condições de desbloqueio.
+    // Renderiza a narrativa, os diálogos e as escolhas liberadas da cena atual.
     public int mostrarCena(Cena cena, List<Escolha> escolhasDisponiveis) {
 
         Terminal.limpaTerminal();
 
-        // Mostra o título da cena atual.
         System.out.println(formatarDestaque("========================================"));
         System.out.println(formatarDestaque(cena.getTitulo()));
         System.out.println(formatarDestaque("========================================"));
         System.out.println();
 
-        // Mostra a descrição da cena quando existe texto narrativo cadastrado.
+        // Imprime a descrição de ambiente caso a cena possua texto narrativo.
         if (cena.getTextoNarrativa() != null) {
             System.out.println(formatar(cena.getTextoNarrativa()));
             System.out.println();
         }
 
-        // Percorre os diálogos da cena e exibe o nome do personagem antes da fala quando houver personagem associado.
+        // Imprime os diálogos destacando o nome do personagem quando houver autor associado.
         for (Dialogo dialogo : cena.getDialogos()) {
             if (dialogo.getPersonagem() != null) {
-                // Nome do personagem em destaque (secundária) e a fala na cor primária
                 System.out.println(
                         formatarDestaque(dialogo.getPersonagem() + ": ") +
                                 formatar(dialogo.getConteudo())
                 );
             } else {
-                // Permite usar Dialogo também para textos narrativos sem personagem.
                 System.out.println(formatar(dialogo.getConteudo()));
             }
             System.out.println();
         }
 
-        // Mesmo sem escolhas, S salva e M retorna ao menu.
+        // Em cenas de transição (sem escolhas), aguarda confirmação de avanço ou comando de sistema.
         if (escolhasDisponiveis == null || escolhasDisponiveis.isEmpty()) {
             System.out.print(formatarDestaque("[ENTER] Continuar | [S] Salvar | [M] Menu: "));
             String entrada = scanner.nextLine().trim();
@@ -77,7 +75,7 @@ public class JogoView {
 
         System.out.println(formatarDestaque("----------- ESCOLHAS -----------"));
 
-        // Numera somente as escolhas disponíveis, porque escolhas bloqueadas não podem aparecer para o jogador.
+        // Lista e numera sequencialmente apenas as escolhas que cumpriram suas condições.
         for (int i = 0; i < escolhasDisponiveis.size(); i++) {
             System.out.println(
                     formatar((i + 1) + " - " + escolhasDisponiveis.get(i).getTextoOpcao())
@@ -86,7 +84,7 @@ public class JogoView {
 
         System.out.print(formatarDestaque("\nEscolha uma opção | [S] Salvar | [M] Menu: "));
 
-        // nextLine permite tanto números quanto os comandos S e M.
+        // Lê a linha como texto para aceitar tanto o índice da escolha quanto os atalhos S e M.
         String entrada = scanner.nextLine().trim();
         if (entrada.equalsIgnoreCase("S")) return -2;
         if (entrada.equalsIgnoreCase("M")) return -3;
@@ -98,21 +96,19 @@ public class JogoView {
         }
     }
 
-
-    // Exibe a mensagem recebida pelo Controller antes de aguardar um curto intervalo.
+    // Imprime mensagens de falha em vermelho e pausa brevemente a execução.
     public void apresentaErro(String mensagem) {
         System.out.println();
         System.out.println(modo + Terminal.ANSI_RED + mensagem + reset);
         Terminal.aplicaDelay(900);
     }
 
-    // Evita sair acidentalmente e perder mudanças ainda não salvas.
+    // Solicita confirmação antes de interromper o loop da partida e voltar ao menu.
     public boolean confirmarVoltarMenu() {
         System.out.print(formatarDestaque("Mudanças não salvas serão perdidas. Voltar? (S/N): "));
         return scanner.nextLine().trim().equalsIgnoreCase("S");
     }
 
-    // Métodos para atualizar as configurações (se a view mudar durante o jogo)
     public void setCorPrimaria(String corPrimaria) {
         this.corPrimaria = corPrimaria;
     }

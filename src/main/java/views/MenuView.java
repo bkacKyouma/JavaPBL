@@ -6,33 +6,31 @@ import java.util.Scanner;
 // Mostra as telas do menu e devolve ao Controller as opções digitadas pelo jogador.
 public class MenuView {
 
-    // O mesmo Scanner é reutilizado no menu principal, temperamento, instruções e créditos.
     private final Scanner scanner = new Scanner(System.in);
 
-    // Atributos de formatação
+    // Estado atual da formatação ANSI aplicada nas telas de menu.
     private String corPrimaria;
-    private String corSecundaria; // Pode ser usada para destaques ou títulos
-    private String modo; // Para bold, itálico, reverse (modo claro)
+    private String corSecundaria;
+    private String modo;
     private final String reset = Terminal.ANSI_RESET;
 
-    // Construtor para receber as configurações
     public MenuView(String corPrimaria, String corSecundaria, String modo) {
         this.corPrimaria = corPrimaria;
         this.corSecundaria = corSecundaria;
         this.modo = modo;
     }
 
-    // Método auxiliar para formatar texto padrão
+    // Envolve o texto padrão com a cor primária e o modo ativos.
     private String formatar(String texto) {
         return modo + corPrimaria + texto + reset;
     }
 
-    // Método auxiliar para formatar destaques (títulos, avisos)
+    // Envolve títulos e avisos com a cor secundária.
     private String formatarDestaque(String texto) {
         return modo + corSecundaria + texto + reset;
     }
 
-    // Exibe as opções do menu principal
+    // Exibe o menu principal e retorna o índice escolhido ou -1 em caso de entrada inválida.
     public int openMenu() {
         Terminal.limpaTerminal();
 
@@ -61,7 +59,7 @@ public class MenuView {
         }
     }
 
-    // Menu Intermediário para Colecionáveis
+    // Exibe o submenu que agrupa a galeria de finais e os conteúdos extras.
     public int openColecionaveisMenu() {
         Terminal.limpaTerminal();
 
@@ -86,7 +84,7 @@ public class MenuView {
         }
     }
 
-    // Nova tela para configurações de aparência
+    // Lista as opções de cor e estilo demonstrando o efeito ANSI diretamente em cada linha.
     public int openConfigMenu() {
         Terminal.limpaTerminal();
 
@@ -94,13 +92,13 @@ public class MenuView {
         System.out.println(formatarDestaque("             PREFERÊNCIAS"));
         System.out.println(formatarDestaque("========================================"));
         System.out.println();
-        System.out.println(Terminal.ANSI_GREEN + "1 - Cor: Verde"+ Terminal.ANSI_RESET);
-        System.out.println(Terminal.ANSI_CYAN +"2 - Cor: Ciano"+ Terminal.ANSI_RESET);
-        System.out.println(Terminal.ANSI_YELLOW +"3 - Cor: Amarelo"+ Terminal.ANSI_RESET);
-        System.out.println(Terminal.ANSI_WHITE +"4 - Cor: Branco"+ Terminal.ANSI_RESET);
+        System.out.println(Terminal.ANSI_GREEN + "1 - Cor: Verde" + Terminal.ANSI_RESET);
+        System.out.println(Terminal.ANSI_CYAN + "2 - Cor: Ciano" + Terminal.ANSI_RESET);
+        System.out.println(Terminal.ANSI_YELLOW + "3 - Cor: Amarelo" + Terminal.ANSI_RESET);
+        System.out.println(Terminal.ANSI_WHITE + "4 - Cor: Branco" + Terminal.ANSI_RESET);
         System.out.println(Terminal.ANSI_REVERSE + "5 - Alternar Modo Claro/Escuro" + Terminal.ANSI_RESET);
         System.out.println(Terminal.ANSI_BOLD + "6 - Alternar Texto em Negrito" + Terminal.ANSI_RESET);
-        System.out.println(Terminal.ANSI_ITALIC +"7 - Alternar Texto em Itálico"+ Terminal.ANSI_RESET);
+        System.out.println(Terminal.ANSI_ITALIC + "7 - Alternar Texto em Itálico" + Terminal.ANSI_RESET);
         System.out.println(formatar("0 - Voltar"));
 
         System.out.print(formatar("\nDigite o número da opção desejada: "));
@@ -115,7 +113,7 @@ public class MenuView {
         }
     }
 
-    // Mostra os três temperamentos disponíveis antes do início de uma nova partida.
+    // Solicita o temperamento inicial da protagonista antes de criar a partida.
     public int openAtributesMenu() {
 
         Terminal.limpaTerminal();
@@ -145,7 +143,7 @@ public class MenuView {
         }
     }
 
-    // Explica o contexto da investigação e quais elementos podem mudar com as escolhas.
+    // Apresenta o resumo da mecânica de escolhas e aguarda confirmação para retornar.
     public void Instrucoes() {
 
         Terminal.limpaTerminal();
@@ -205,8 +203,7 @@ public class MenuView {
         scanner.nextLine();
     }
 
-
-    // Mostra os nomes dos desenvolvedores e aguarda ENTER antes de retornar ao menu.
+    // Exibe os autores do projeto e aguarda confirmação para retornar.
     public void Creditos() {
 
         Terminal.limpaTerminal();
@@ -231,16 +228,14 @@ public class MenuView {
         scanner.nextLine();
     }
 
-
-    // Mostra a mensagem de erro enviada pelo Controller e aplica um atraso antes da nova tentativa.
+    // Imprime mensagens de falha em vermelho e pausa brevemente a execução.
     public void apresentaErro(String mensagem) {
         System.out.println();
-        // Erros podem usar a cor vermelha diretamente do Terminal se desejar, ou usar a secundária
         System.out.println(modo + Terminal.ANSI_RED + mensagem + reset);
         Terminal.aplicaDelay(900);
     }
 
-    // Pergunta em qual dos três slots o jogador deseja salvar ou carregar.
+    // Exibe a seleção de slots de salvamento e retorna o número escolhido.
     public int escolherSlot(String titulo) {
         Terminal.limpaTerminal();
         System.out.println(formatarDestaque("=== " + titulo + " ==="));
@@ -259,13 +254,13 @@ public class MenuView {
         }
     }
 
-    // Evita substituir um save existente sem autorização do jogador.
+    // Solicita confirmação do jogador antes de sobrescrever um slot já ocupado.
     public boolean confirmarSobrescrita(int slot) {
         System.out.print(formatarDestaque("O slot " + slot + " já possui um save. Substituir? (S/N): "));
         return scanner.nextLine().trim().equalsIgnoreCase("S");
     }
 
-    // Mostra os finais que o jogador já desbloqueou
+    // Verifica a lista de finais registrados no perfil e exibe o título apenas dos que já foram alcançados.
     public void mostrarGaleriaFinais(java.util.List<String> finaisDesbloqueados) {
         Terminal.limpaTerminal();
 
@@ -274,28 +269,24 @@ public class MenuView {
         System.out.println(formatarDestaque("========================================"));
         System.out.println();
 
-        // Final 1
         if (finaisDesbloqueados != null && finaisDesbloqueados.contains("FINAL_TOIN_INDICIADO_BRUNO_VIVO")) {
             System.out.println(formatar("1. A verdade que restou (Toin Indiciado, Bruno Vivo)"));
         } else {
             System.out.println(formatar("1. ??? (Bloqueado)"));
         }
 
-        // Final 2
         if (finaisDesbloqueados != null && finaisDesbloqueados.contains("FINAL_TOIN_INDICIADO_BRUNO_MORTO")) {
             System.out.println(formatar("2. Depois da fumaça (Toin Indiciado, Bruno Morto)"));
         } else {
             System.out.println(formatar("2. ??? (Bloqueado)"));
         }
 
-        // Final 3
         if (finaisDesbloqueados != null && finaisDesbloqueados.contains("FINAL_KATARINA_INDICIADA_BRUNO_VIVO")) {
             System.out.println(formatar("3. Sob suspeita (Katarina Indiciada, Bruno Vivo)"));
         } else {
             System.out.println(formatar("3. ??? (Bloqueado)"));
         }
 
-        // Final 4
         if (finaisDesbloqueados != null && finaisDesbloqueados.contains("FINAL_KATARINA_INDICIADA_BRUNO_MORTO")) {
             System.out.println(formatar("4. O peso da noite (Katarina Indiciada, Bruno Morto)"));
         } else {
@@ -307,7 +298,7 @@ public class MenuView {
         scanner.nextLine();
     }
 
-    // Mostra a lista de conteúdos extras e verifica se estão bloqueados
+    // Lista os itens extras verificando quais chaves já constam no perfil global.
     public int openMenuExtras(java.util.List<String> extrasDesbloqueados) {
         Terminal.limpaTerminal();
 
@@ -316,21 +307,18 @@ public class MenuView {
         System.out.println(formatarDestaque("========================================"));
         System.out.println();
 
-        // Extra 1 - Mérito de Fim de Jogo
         if (extrasDesbloqueados != null && extrasDesbloqueados.contains("FIM?")) {
             System.out.println(formatar("1 - O Fim"));
         } else {
             System.out.println(formatar("1 - ??? (Bloqueado)"));
         }
 
-        // Extra 2
         if (extrasDesbloqueados != null && extrasDesbloqueados.contains("ISQUEIRO_TOIN")) {
             System.out.println(formatar("2 - Isqueiro de Toin (Não Registrado)"));
         } else {
             System.out.println(formatar("2 - ??? (Bloqueado)"));
         }
 
-        // Extra 3
         if (extrasDesbloqueados != null && extrasDesbloqueados.contains("BRINQUEDO_BRUNO")) {
             System.out.println(formatar("3 - Brinquedo de Bruno"));
         } else {
@@ -351,8 +339,6 @@ public class MenuView {
         }
     }
 
-
-    // Métodos para atualizar as configurações no Controller
     public void setCorPrimaria(String corPrimaria) {
         this.corPrimaria = corPrimaria;
     }
@@ -364,7 +350,4 @@ public class MenuView {
     public void setModo(String modo) {
         this.modo = modo;
     }
-
-    // Exibe a imagem de um diário velho baseada no arquivo fornecido
-
 }
