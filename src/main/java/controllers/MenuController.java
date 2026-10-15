@@ -68,6 +68,7 @@ public class MenuController {
                     } else {
                         new JogoController(perfilAtual.corPrimaria, perfilAtual.corSecundaria, perfilAtual.modo).carregarJogo(escolha);
                         option = 0;
+                        //
                     }
                 } else if (escolha != 0) {
                     MenuScreen.apresentaErro("Slot inválido.");
