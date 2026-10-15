@@ -54,7 +54,7 @@ public class Colecionaveis {
         System.out.println(corTexto + "Alcance pelo menos um final: obrigado por jogar e parabéns por zerar o jogo!" + reset);
         System.out.println();
         System.out.println(corDestaque + "[Pressione ENTER para voltar]" + reset);
-        scanner.nextLine();
+        scanner.nextLine().trim();
     }
 
     // Exibe o colecionável referente ao brinquedo de Bruno e aguarda ENTER para retornar.
@@ -66,7 +66,7 @@ public class Colecionaveis {
         String p = "\u001B[90m";
 
         System.out.println(corDestaque + "========================================" + reset);
-        System.out.println(corDestaque + "          REALIDADE INDIGESTA           " + reset);
+        System.out.println(corDestaque + "          FINAL INDIGESTO           " + reset);
         System.out.println(corDestaque + "========================================" + reset);
         System.out.println();
 
@@ -93,9 +93,9 @@ public class Colecionaveis {
         System.out.println("             " + p + "@@@@@@@@@@@@@@" + reset);
         System.out.println();
 
-        System.out.println(corTexto + "Era o jogo favorito dele..." + reset);
+        System.out.println(corTexto + "[BRUNO MORRE] Era o jogo favorito dele..." + reset);
         System.out.println();
         System.out.println(corDestaque + "[Pressione ENTER para voltar]" + reset);
-        scanner.nextLine();
+        scanner.nextLine().trim();
     }
 }

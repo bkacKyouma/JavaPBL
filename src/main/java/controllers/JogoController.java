@@ -103,9 +103,10 @@ public class JogoController {
         }
     }
 
-    // Permite salvar a cena atual manualmente em um slot escolhido pelo jogador.
+    // Exibe a lista de slots com seus nomes atuais, solicita o apelido e grava a partida.
     private void salvarManual() {
-        int slot = this.menuView.escolherSlot("SALVAR PARTIDA");
+        String[] savesDisponiveis = persistencia.listarNomesSaves();
+        int slot = this.menuView.escolherSlot("SALVAR PARTIDA", savesDisponiveis, false);
         if (slot == 0) return;
         if (slot < 1 || slot > PersistenciaJogo.TOTAL_SLOTS) {
             this.jogoView.apresentaErro("Slot inválido.");
@@ -116,9 +117,10 @@ public class JogoController {
             return;
         }
 
+        String nomeSave = this.jogoView.pegaNomeSave();
         DadosPartida dados = DadosPartida.capturar(estadoJogo, brunoSobreviveu, slot);
         try {
-            persistencia.salvar(slot, dados);
+            persistencia.salvar(slot, dados, nomeSave);
             System.out.println("Partida salva no slot " + slot + ".");
             views.Terminal.aplicaDelay(900);
         } catch (IOException e) {
@@ -132,7 +134,7 @@ public class JogoController {
 
         DadosPartida dados = DadosPartida.capturar(estadoJogo, brunoSobreviveu, slot);
         try {
-            persistencia.salvar(slot, dados);
+            persistencia.salvar(slot, dados, "auto save");
             System.out.println("Auto save no slot " + slot + ".");
             views.Terminal.aplicaDelay(600);
         } catch (IOException e) {
@@ -2016,8 +2018,7 @@ public class JogoController {
                     persistence.PersistenciaGlobal persistenciaG = new persistence.PersistenciaGlobal();
                     models.DadosGlobais perfil = persistenciaG.carregar();
                     perfil.registrarFinal(finalAlcancado);
-                    if (!perfil.extrasDesbloqueados.contains("FIM"))
-                        perfil.registrarExtra("FIM?");
+                    perfil.registrarExtra("FIM?");
                     if (finalAlcancado.contains("BRUNO_MORTO"))
                         perfil.registrarExtra("BRINQUEDO_BRUNO");
 

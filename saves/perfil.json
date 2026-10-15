@@ -1,9 +1,9 @@
 {
   "versao" : 1,
-  "dataUltimaModificacao" : 1791857902247,
-  "corPrimaria" : "\u001B[32m",
+  "dataUltimaModificacao" : 1792076850197,
+  "corPrimaria" : "\u001B[33m",
   "corSecundaria" : "\u001B[33m",
-  "modo" : "",
+  "modo" : "\u001B[1m",
   "finaisDesbloqueados" : [ "FINAL_KATARINA_INDICIADA_BRUNO_MORTO" ],
   "extrasDesbloqueados" : [ "FIM?", "BRINQUEDO_BRUNO" ]
 }

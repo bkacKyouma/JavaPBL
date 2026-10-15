@@ -69,7 +69,7 @@ public class MenuView {
         System.out.println();
 
         System.out.println(formatar("1 - Galeria de Finais"));
-        System.out.println(formatar("2 - Conteúdos Extras"));
+        System.out.println(formatar("2 - Conquistas"));
         System.out.println(formatar("0 - Voltar"));
 
         System.out.print(formatar("\nDigite o número da opção desejada: "));
@@ -158,20 +158,24 @@ public class MenuView {
         System.out.println(formatar("de uma noite marcada por um incêndio"));
         System.out.println(formatar("em sua própria casa."));
         System.out.println();
+        Terminal.aplicaDelay(3800);
 
         System.out.println(formatar("Durante um interrogatório conduzido pelo"));
         System.out.println(formatar("detetive Fauan, lembranças do passado"));
         System.out.println(formatar("começam a se misturar ao presente."));
         System.out.println();
+        Terminal.aplicaDelay(3800);
 
         System.out.println(formatar("Suas escolhas determinam como Katarina"));
         System.out.println(formatar("responde, interpreta suas memórias e"));
         System.out.println(formatar("se relaciona com as pessoas envolvidas."));
         System.out.println();
+        Terminal.aplicaDelay(4200);
 
         System.out.println(formatar("Ao longo da investigação, suas decisões"));
         System.out.println(formatar("podem alterar:"));
         System.out.println();
+        Terminal.aplicaDelay(2500);
 
         System.out.println(formatar("- a memória de Katarina;"));
         System.out.println(formatar("- sua estabilidade emocional;"));
@@ -179,28 +183,33 @@ public class MenuView {
         System.out.println(formatar("- sua relação com outros personagens;"));
         System.out.println(formatar("- as pistas encontradas durante a história."));
         System.out.println();
+        Terminal.aplicaDelay(4550);
 
         System.out.println(formatar("Algumas respostas e caminhos só estarão"));
         System.out.println(formatar("disponíveis caso determinadas condições"));
         System.out.println(formatar("tenham sido alcançadas anteriormente."));
         System.out.println();
+        Terminal.aplicaDelay(4200);
 
         System.out.println(formatar("Por isso, cada decisão pode provocar"));
         System.out.println(formatar("consequências imediatas ou aparecer"));
         System.out.println(formatar("novamente muito tempo depois."));
         System.out.println();
+        Terminal.aplicaDelay(3500);
 
         System.out.println(formatar("Quando uma escolha aparecer, digite o"));
         System.out.println(formatar("número correspondente à opção desejada."));
         System.out.println();
+        Terminal.aplicaDelay(4200);
 
         System.out.println(formatar("Não existe um único caminho."));
         System.out.println(formatar("As decisões tomadas durante a investigação"));
         System.out.println(formatar("podem levar a diferentes conclusões."));
         System.out.println();
+        Terminal.aplicaDelay(800);
 
         System.out.println(formatarDestaque("[Pressione ENTER para voltar ao menu]"));
-        scanner.nextLine();
+        scanner.nextLine().trim();
     }
 
     // Exibe os autores do projeto e aguarda confirmação para retornar.
@@ -214,12 +223,16 @@ public class MenuView {
         System.out.println();
 
         System.out.println(formatar("Desenvolvido por:"));
-        Terminal.aplicaDelay(600);
+        Terminal.aplicaDelay(850);
         System.out.println();
 
         System.out.println(formatar("Bruno Carneiro"));
+        Terminal.aplicaDelay(1000);
+
+
         System.out.println(formatar("Raphael Henrique"));
         System.out.println();
+        Terminal.aplicaDelay(1000);
 
         System.out.println(formatarDestaque("Obrigado por jogar!"));
         System.out.println();
@@ -236,14 +249,22 @@ public class MenuView {
     }
 
     // Exibe a seleção de slots de salvamento e retorna o número escolhido.
-    public int escolherSlot(String titulo) {
+    // Exibe a seleção de slots listando os nomes personalizados (ou "Vazio") com um Array.
+    public int escolherSlot(String titulo, String[] nomesSaves, boolean mostrarContinuar) {
         Terminal.limpaTerminal();
         System.out.println(formatarDestaque("=== " + titulo + " ==="));
-        System.out.println(formatar("1 - Slot 1"));
-        System.out.println(formatar("2 - Slot 2"));
-        System.out.println(formatar("3 - Slot 3"));
-        System.out.println(formatar("4 - Slot 4"));
-        System.out.println(formatar("5 - Continuar último jogo"));
+
+        // Percorre o Array iterando as opções de forma dinâmica
+        for (int i = 0; i < nomesSaves.length; i++) {
+            String nome = nomesSaves[i];
+            String textoSlot = nome.equals("Vazio") ? "Vazio" : "Save: " + nome;
+            System.out.println(formatar((i + 1) + " - Slot " + (i + 1) + " [" + textoSlot + "]"));
+        }
+
+        if (mostrarContinuar) {
+            System.out.println(formatar("5 - Excluir save"));
+        }
+
         System.out.println(formatar("0 - Cancelar"));
         System.out.print(formatar("\nEscolha: "));
 
@@ -252,6 +273,29 @@ public class MenuView {
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+
+    // Pede ao jogador o apelido que vai figurar na listagem de arquivos
+    public String pegaNomeSave() {
+        System.out.print(formatar("\nInforme o seu apelido (nome do save): "));
+        return scanner.nextLine().trim(); // Alterado para aceitar nomes com espaço
+    }
+
+    public int excluirSaveView() {
+        System.out.print(formatarDestaque("\nQual save deseja excluir (1 a 4 | 0 para cancelar)? "));
+        try {
+            return Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    // Solicita confirmação explícita exibindo o número do slot e o nome do save.
+    public boolean confirmarExclusao(int slot, String nomeSave) {
+        System.out.print(formatarDestaque(
+            "Tem certeza de que deseja excluir o Slot " +
+            slot + " [" + nomeSave + "]? (S/N): "));
+        return scanner.nextLine().trim().equalsIgnoreCase("S");
     }
 
     // Solicita confirmação do jogador antes de sobrescrever um slot já ocupado.

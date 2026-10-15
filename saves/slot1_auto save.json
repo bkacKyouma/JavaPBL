@@ -1,19 +1,22 @@
 {
   "versao" : 1,
-  "slot" : 4,
-  "dataSalvamento" : 1791857501230,
+  "slot" : 1,
+  "dataSalvamento" : 1792007519423,
   "resumo" : "O VEREDITO - O veredito",
   "idProtagonista" : 1,
   "nomeProtagonista" : "Katarina",
   "temperamento" : "SANGUE_FRIO",
   "memoria" : 100,
-  "estabilidadeEmocional" : 5,
-  "culpaPercebida" : 15,
-  "confiancaFauan" : 20,
-  "vinculoPassos" : 100,
-  "suspeitaToin" : 55,
+  "estabilidadeEmocional" : 10,
+  "culpaPercebida" : 20,
+  "confiancaFauan" : 100,
+  "vinculoPassos" : 95,
+  "suspeitaToin" : 85,
   "posturaPaternidade" : "NEGACAO_TOTAL",
   "pistas" : [ {
+    "nome" : "Pergunta sobre o alarme",
+    "descricao" : "Toin perguntou se o alarme de incêndio ainda funcionava."
+  }, {
     "nome" : "Alarme desligado manualmente",
     "descricao" : "A perícia concluiu que o alarme do quarto de Bruno foi desligado manualmente."
   } ],

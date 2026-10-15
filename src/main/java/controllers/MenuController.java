@@ -43,21 +43,40 @@ public class MenuController {
             }
 
             // Permite escolher um dos quatro slots manualmente ou retomar o save mais recente.
+// Permite escolher um dos quatro slots manualmente ou retomar o save mais recente.
             if (option == 2) {
-                int slotMaisRecente = persistencia.slotMaisRecente();
-                if (slotMaisRecente == 0) {
-                    MenuScreen.apresentaErro("Nenhuma partida salva foi encontrada.");
-                } else {
-                    int escolha = MenuScreen.escolherSlot("1 a 4 para Slots | 5 para Continuar Último Jogo");
-                    if (escolha == 5) {
-                        new JogoController(perfilAtual.corPrimaria, perfilAtual.corSecundaria, perfilAtual.modo).carregarJogo(slotMaisRecente);
-                    } else if (escolha >= 1 && escolha <= 4) {
-                        new JogoController(perfilAtual.corPrimaria, perfilAtual.corSecundaria, perfilAtual.modo).carregarJogo(escolha);
-                    } else if (escolha != 0) {
-                        MenuScreen.apresentaErro("Slot inválido.");
+                // Recupera os nomes dos arquivos
+                while (option == 2){
+                String[] savesDisponiveis = persistencia.listarNomesSaves();
+
+                // Envia o array para a view pintar o menu
+                int escolha = MenuScreen.escolherSlot("CARREGAR PARTIDA", savesDisponiveis, true);
+
+                if (escolha == 5) {
+                    int opcaoExclusao = MenuScreen.excluirSaveView();
+                    if (opcaoExclusao > 0){
+                        MenuScreen.confirmarExclusao(opcaoExclusao,savesDisponiveis[opcaoExclusao-1]);
+                      //  persistencia.excluirSave(opcaoExclusao);
                     }
+                    else if (opcaoExclusao != 0){
+                        MenuScreen.apresentaErro("Slot inválido");
+                    }
+                } else if (escolha >= 1 && escolha <= 4) {
+                    // Impede o jogador de tentar carregar um slot que está vazio
+                    if (savesDisponiveis[escolha - 1].equals("Vazio")) {
+                        MenuScreen.apresentaErro("Este slot está vazio.");
+                    } else {
+                        new JogoController(perfilAtual.corPrimaria, perfilAtual.corSecundaria, perfilAtual.modo).carregarJogo(escolha);
+                        option = 0;
+                    }
+                } else if (escolha != 0) {
+                    MenuScreen.apresentaErro("Slot inválido.");
                 }
-            }
+                else if (escolha == 0){
+                    option = 0;
+                }
+
+            }}
 
             // Gerencia o submenu de colecionáveis, dividindo o acesso entre finais e conteúdos extras.
             if (option == 3) {

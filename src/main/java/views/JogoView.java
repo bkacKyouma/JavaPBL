@@ -109,6 +109,13 @@ public class JogoView {
         return scanner.nextLine().trim().equalsIgnoreCase("S");
     }
 
+    // Solicita o identificador personalizado que será anexado ao arquivo do slot.
+    public String pegaNomeSave() {
+        System.out.print(formatar("\nInforme o seu apelido (nome do save): "));
+        String nomeSave = scanner.nextLine().trim();
+        return nomeSave.isEmpty() ? "Sem_Nome" : nomeSave;
+    }
+
     public void setCorPrimaria(String corPrimaria) {
         this.corPrimaria = corPrimaria;
     }
