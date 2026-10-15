@@ -38,4 +38,7 @@ public class Terminal {
             throw new RuntimeException(ex);
         }
     }
+    public static void enviaMensagem(String mensagem){
+        System.out.println(mensagem);
+    }
 }

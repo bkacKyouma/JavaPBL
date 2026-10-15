@@ -5,6 +5,7 @@ import persistence.PersistenciaGlobal;
 import views.Colecionaveis;
 import views.MenuView;
 import persistence.PersistenciaJogo;
+import views.Terminal;
 
 // Recebe as opções do menu principal e aciona o fluxo correspondente.
 public class MenuController {
@@ -55,20 +56,32 @@ public class MenuController {
                 if (escolha == 5) {
                     int opcaoExclusao = MenuScreen.excluirSaveView();
                     if (opcaoExclusao > 0){
-                        MenuScreen.confirmarExclusao(opcaoExclusao,savesDisponiveis[opcaoExclusao-1]);
-                      //  persistencia.excluirSave(opcaoExclusao);
+                        boolean exclusao = MenuScreen.confirmarExclusao(opcaoExclusao,savesDisponiveis[opcaoExclusao-1]);
+                        if (exclusao){
+                            try {
+                                persistencia.excluirSave(opcaoExclusao);
+                                Terminal.enviaMensagem("Slot " +
+                                        opcaoExclusao + " " +
+                                        savesDisponiveis[opcaoExclusao-1] +
+                                        " excluído com sucesso.");
+                            }
+                            catch (Exception e){
+                                MenuScreen.apresentaErro("Erro ao excluir o save: " + e.getMessage());
+                            }
+                        }
+                        //  persistencia.excluirSave(opcaoExclusao);
                     }
                     else if (opcaoExclusao != 0){
                         MenuScreen.apresentaErro("Slot inválido");
                     }
-                } else if (escolha >= 1 && escolha <= 4) {
+                }
+                else if (escolha >= 1 && escolha <= 4) {
                     // Impede o jogador de tentar carregar um slot que está vazio
                     if (savesDisponiveis[escolha - 1].equals("Vazio")) {
                         MenuScreen.apresentaErro("Este slot está vazio.");
                     } else {
                         new JogoController(perfilAtual.corPrimaria, perfilAtual.corSecundaria, perfilAtual.modo).carregarJogo(escolha);
                         option = 0;
-                        //
                     }
                 } else if (escolha != 0) {
                     MenuScreen.apresentaErro("Slot inválido.");
@@ -184,7 +197,7 @@ public class MenuController {
                     try {
                         persistenciaGlobal.salvar(perfilAtual);
                     } catch (Exception e) {
-                        System.out.println("Erro ao salvar perfil");
+                        MenuScreen.apresentaErro("Erro ao salvar perfil");
                     }
                 }
             }

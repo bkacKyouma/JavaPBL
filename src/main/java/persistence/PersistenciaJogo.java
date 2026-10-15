@@ -105,7 +105,13 @@ public class PersistenciaJogo {
         return encontrarCaminhoSlot(slot) != null;
     }
 
-    //public void excluirSave()
+    public boolean excluirSave(int slot) throws IOException{
+        Path arquivo = encontrarCaminhoSlot(slot);
+        if (arquivo != null && Files.isRegularFile(arquivo)){
+            return Files.deleteIfExists(arquivo);
+        }
+        return false;
+    }
 /*
     // Usa a data de modificação para localizar o último save jogado.
     public int slotMaisRecente() {

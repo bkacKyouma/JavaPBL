@@ -121,7 +121,7 @@ public class JogoController {
         DadosPartida dados = DadosPartida.capturar(estadoJogo, brunoSobreviveu, slot);
         try {
             persistencia.salvar(slot, dados, nomeSave);
-            System.out.println("Partida salva no slot " + slot + ".");
+            Terminal.enviaMensagem("Partida salva no slot " + slot + ".");
             views.Terminal.aplicaDelay(900);
         } catch (IOException e) {
             this.jogoView.apresentaErro("Erro ao salvar: " + e.getMessage());
@@ -135,7 +135,7 @@ public class JogoController {
         DadosPartida dados = DadosPartida.capturar(estadoJogo, brunoSobreviveu, slot);
         try {
             persistencia.salvar(slot, dados, "auto save");
-            System.out.println("Auto save no slot " + slot + ".");
+            Terminal.enviaMensagem("Auto save no slot " + slot + ".");
             views.Terminal.aplicaDelay(600);
         } catch (IOException e) {
             this.jogoView.apresentaErro("Erro ao salvar: " + e.getMessage());

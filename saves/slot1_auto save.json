@@ -1,26 +1,20 @@
 {
   "versao" : 1,
   "slot" : 1,
-  "dataSalvamento" : 1792007519423,
-  "resumo" : "O VEREDITO - O veredito",
+  "dataSalvamento" : 1792103267821,
+  "resumo" : "A NOITE QUE NÃO SE APAGA - A resposta de Fauan",
   "idProtagonista" : 1,
   "nomeProtagonista" : "Katarina",
-  "temperamento" : "SANGUE_FRIO",
-  "memoria" : 100,
-  "estabilidadeEmocional" : 10,
-  "culpaPercebida" : 20,
-  "confiancaFauan" : 100,
-  "vinculoPassos" : 95,
-  "suspeitaToin" : 85,
-  "posturaPaternidade" : "NEGACAO_TOTAL",
-  "pistas" : [ {
-    "nome" : "Pergunta sobre o alarme",
-    "descricao" : "Toin perguntou se o alarme de incêndio ainda funcionava."
-  }, {
-    "nome" : "Alarme desligado manualmente",
-    "descricao" : "A perícia concluiu que o alarme do quarto de Bruno foi desligado manualmente."
-  } ],
-  "capituloAtualId" : 5,
-  "cenaAtualId" : 504,
+  "temperamento" : "SANGUE_QUENTE",
+  "memoria" : 5,
+  "estabilidadeEmocional" : 40,
+  "culpaPercebida" : 35,
+  "confiancaFauan" : 40,
+  "vinculoPassos" : 50,
+  "suspeitaToin" : 50,
+  "posturaPaternidade" : "INDEFINIDA",
+  "pistas" : [ ],
+  "capituloAtualId" : 1,
+  "cenaAtualId" : 112,
   "brunoSobreviveu" : false
 }
