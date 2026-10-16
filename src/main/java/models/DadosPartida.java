@@ -8,6 +8,7 @@ public class DadosPartida {
 
     public int versao = 1;
     public int slot;
+    public String nomeSave;
     public long dataSalvamento;
     public String resumo;
 

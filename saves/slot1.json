@@ -1,0 +1,33 @@
+{
+  "versao" : 1,
+  "slot" : 1,
+  "nomeSave" : "auto save",
+  "dataSalvamento" : 1792174194371,
+  "resumo" : "O VEREDITO - O veredito",
+  "idProtagonista" : 1,
+  "nomeProtagonista" : "Katarina",
+  "temperamento" : "SANGUE_FRIO",
+  "memoria" : 100,
+  "estabilidadeEmocional" : 80,
+  "culpaPercebida" : 25,
+  "confiancaFauan" : 100,
+  "vinculoPassos" : 75,
+  "suspeitaToin" : 100,
+  "posturaPaternidade" : "NEGACAO_TOTAL",
+  "pistas" : [ {
+    "nome" : "Cheiro de gasolina",
+    "descricao" : "Katarina lembra de um cheiro de gasolina antes da fumaça."
+  }, {
+    "nome" : "Sombra desconhecida",
+    "descricao" : "Katarina lembra de uma sombra próxima ao quarto de Bruno."
+  }, {
+    "nome" : "Pergunta sobre o alarme",
+    "descricao" : "Toin perguntou se o alarme de incêndio ainda funcionava."
+  }, {
+    "nome" : "Alarme desligado manualmente",
+    "descricao" : "A perícia concluiu que o alarme do quarto de Bruno foi desligado manualmente."
+  } ],
+  "capituloAtualId" : 5,
+  "cenaAtualId" : 504,
+  "brunoSobreviveu" : true
+}
