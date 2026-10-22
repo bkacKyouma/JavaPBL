@@ -1,0 +1,424 @@
+package models;
+
+public abstract class Personagem {
+
+    private final int id;
+    private String nome;
+
+    public Personagem(int id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+}
+
+
+  
+public class Psecundario extends Personagem {
+ 
+    public Psecundario(int id, String nome) {
+        super(id, nome);
+    }
+}
+
+
+public class Pista {
+ 
+    private String nome;
+    private String descricao;
+ 
+    public Pista(String nome, String descricao) {
+        this.nome = nome;
+        this.descricao = descricao;
+    }
+ 
+    public String getNome() {
+        return nome;
+    }
+ 
+    public String getDescricao() {
+        return descricao;
+    }
+}
+
+
+
+public class Dialogo {
+ 
+    private Personagem personagem;
+    private String conteudo;
+    private String tipo;
+ 
+    public Dialogo(Personagem personagem, String conteudo, String tipo) {
+        this.personagem = personagem;
+        this.conteudo = conteudo;
+        this.tipo = tipo;
+    }
+ 
+    public Personagem getPersonagem() {
+        return personagem;
+    }
+ 
+    public String getConteudo() {
+        return conteudo;
+    }
+ 
+    public String getTipo() {
+        return tipo;
+    }
+}
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!
+import java.util.ArrayList;
+import java.util.List;
+!!!!!!!!!!!!!!!!!!!!!!!!!
+public class Protagonista extends Personagem {
+    private String temperamento;
+
+    // Os 3 atributos de Kat, com score de 0 a 100 como foi visto nas ST's
+    private int memoria;
+    private int estabilidadeEmocional;
+    private int culpaPercebida;
+
+    // Os 3 relacionamentos com Kat, com score de 0 a 100 como foi visto nas ST's
+    private int confiancaFauan;
+    private int vinculoPassos;
+    private int suspeitaToin;
+
+    // "INDEFINIDA", "NEGACAO_TOTAL" ou "DUVIDA_ABERTA".
+    private String posturaPaternidade;
+
+    // Todas as pistas colecionadas com Kat ficam armazenadas em uma lista
+    private List<Pista> pistas;
+
+    public Protagonista(int id, String nome, String temperamento) {
+        super(id, nome);
+        this.temperamento = temperamento;
+        this.memoria = 0;
+        this.estabilidadeEmocional = 50;
+        this.culpaPercebida = 50;
+        this.confiancaFauan = 50;
+        this.vinculoPassos = 50;
+        this.suspeitaToin = 50;
+        this.posturaPaternidade = "INDEFINIDA";
+        this.pistas = new ArrayList<>();
+    }
+
+   private int limitar(int valor) {
+        if (valor < 0) {
+            return 0;
+        }
+        if (valor > 100) {
+            return 100;
+        }
+        return valor;
+    }
+
+    public String getTemperamento() {
+        return temperamento;
+    }
+
+    public int getMemoria() {
+        return memoria;
+    }
+
+    public void ajustarMemoria(int delta) {
+        memoria = limitar(memoria + delta);
+    }
+
+    public int getEstabilidadeEmocional() {
+        return estabilidadeEmocional;
+    }
+
+    public void ajustarEstabilidade(int delta) {
+        estabilidadeEmocional = limitar(estabilidadeEmocional + delta);
+    }
+
+    public int getCulpaPercebida() {
+        return culpaPercebida;
+    }
+
+    public void ajustarCulpa(int delta) {
+        culpaPercebida = limitar(culpaPercebida + delta);
+    }
+
+    public int getConfiancaFauan() {
+        return confiancaFauan;
+    }
+
+    public void ajustarConfiancaFauan(int delta) {
+        confiancaFauan = limitar(confiancaFauan + delta);
+    }
+
+    public int getVinculoPassos() {
+        return vinculoPassos;
+    }
+
+    public void ajustarVinculoPassos(int delta) {
+        vinculoPassos = limitar(vinculoPassos + delta);
+    }
+
+    public int getSuspeitaToin() {
+        return suspeitaToin;
+    }
+
+    public void ajustarSuspeitaToin(int delta) {
+        suspeitaToin = limitar(suspeitaToin + delta);
+    }
+
+    public String getPosturaPaternidade() {
+        return posturaPaternidade;
+    }
+
+    public void setPosturaPaternidade(String posturaPaternidade) {
+        this.posturaPaternidade = posturaPaternidade;
+    }
+
+    public List<Pista> getPistas() {
+        return pistas;
+    }
+  
+    //Adiciona uma pista à lista, mas primeiro verifica se ela já existe.
+    public void adicionarPista(Pista pista) {
+        if (!possuiPista(pista.getNome())) {
+            pistas.add(pista);
+        }
+    }
+
+    // Verifica se já existe uma pista com determinado nome dentro da lista pistas
+    public boolean possuiPista(String nomePista) {
+        for (Pista pista : pistas) {
+            if (pista.getNome().equals(nomePista)) {
+                return true;
+            }
+        }
+        return false;
+    }
+  }
+
+
+
+
+
+
+public class Escolha {
+
+    private int id;
+    private String textoOpcao;
+    private int proximaCenaId;
+
+    // Consequências (cada delta começa em 0 e só importa se for != 0).
+    private int deltaMemoria;
+    private int deltaEstabilidade;
+    private int deltaCulpa;
+    private int deltaConfiancaFauan;
+    private int deltaVinculoPassos;
+    private int deltaSuspeitaToin;
+    private Pista pistaGanha; // pode ficar null
+
+    // Condição de desbloqueio (pode ficar tudo null/0 = escolha sempre disponível).
+    private String personagemNecessario; // "Fauan", "Passos" ou "Toin"
+    private int valorMinimoNecessario;
+    private String pistaNecessaria;
+
+    public Escolha(int id, String textoOpcao, int proximaCenaId) {
+        this.id = id;
+        this.textoOpcao = textoOpcao;
+        this.proximaCenaId = proximaCenaId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTextoOpcao() {
+        return textoOpcao;
+    }
+
+    public int getProximaCenaId() {
+        return proximaCenaId;
+    }
+
+    public void definirEfeitos(int deltaMemoria, int deltaEstabilidade, int deltaCulpa,
+                                int deltaConfiancaFauan, int deltaVinculoPassos, int deltaSuspeitaToin) {
+        this.deltaMemoria = deltaMemoria;
+        this.deltaEstabilidade = deltaEstabilidade;
+        this.deltaCulpa = deltaCulpa;
+        this.deltaConfiancaFauan = deltaConfiancaFauan;
+        this.deltaVinculoPassos = deltaVinculoPassos;
+        this.deltaSuspeitaToin = deltaSuspeitaToin;
+    }
+
+    public void definirPistaGanha(Pista pista) {
+        this.pistaGanha = pista;
+    }
+
+    public void definirCondicao(String personagemNecessario, int valorMinimoNecessario, String pistaNecessaria) {
+        this.personagemNecessario = personagemNecessario;
+        this.valorMinimoNecessario = valorMinimoNecessario;
+        this.pistaNecessaria = pistaNecessaria;
+    }
+
+    public boolean estaDisponivel(Protagonista protagonista) {
+        if (personagemNecessario != null) {
+            int valorAtual = 0;
+            if (personagemNecessario.equals("Fauan")) {
+                valorAtual = protagonista.getConfiancaFauan();
+            } else if (personagemNecessario.equals("Passos")) {
+                valorAtual = protagonista.getVinculoPassos();
+            } else if (personagemNecessario.equals("Toin")) {
+                valorAtual = protagonista.getSuspeitaToin();
+            }
+            if (valorAtual < valorMinimoNecessario) {
+                return false;
+            }
+        }
+
+        if (pistaNecessaria != null && !protagonista.possuiPista(pistaNecessaria)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // Antes era uma lista de Efeito percorrida em loop. Aqui é direto.
+    public void aplicarConsequencias(Protagonista protagonista) {
+        protagonista.ajustarMemoria(deltaMemoria);
+        protagonista.ajustarEstabilidade(deltaEstabilidade);
+        protagonista.ajustarCulpa(deltaCulpa);
+        protagonista.ajustarConfiancaFauan(deltaConfiancaFauan);
+        protagonista.ajustarVinculoPassos(deltaVinculoPassos);
+        protagonista.ajustarSuspeitaToin(deltaSuspeitaToin);
+
+        if (pistaGanha != null) {
+            protagonista.adicionarPista(pistaGanha);
+        }
+    }
+}
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+ 
+public class Cena {
+ 
+    private int id;
+    private String titulo;
+    private String textoNarrativa; // rubrica de cena / descrição
+    private String tipo; // "INTERROGATORIO", "FLASHBACK"... String livre, sem enum
+    private List<Escolha> escolhas;
+    private List<Dialogo> dialogos;
+ 
+    public Cena(int id, String titulo, String textoNarrativa, String tipo) {
+        this.id = id;
+        this.titulo = titulo;
+        this.textoNarrativa = textoNarrativa;
+        this.tipo = tipo;
+        this.escolhas = new ArrayList<>();
+        this.dialogos = new ArrayList<>();
+    }
+ 
+    public int getId() {
+        return id;
+    }
+ 
+    public String getTitulo() {
+        return titulo;
+    }
+ 
+    public String getTextoNarrativa() {
+        return textoNarrativa;
+    }
+ 
+    public String getTipo() {
+        return tipo;
+    }
+ 
+    public List<Escolha> getEscolhas() {
+        return escolhas;
+    }
+ 
+    public void adicionarEscolha(Escolha escolha) {
+        escolhas.add(escolha);
+    }
+ 
+    public List<Dialogo> getDialogos() {
+        return dialogos;
+    }
+ 
+    public void adicionarDialogo(Dialogo dialogo) {
+        dialogos.add(dialogo);
+    }
+ 
+    // Filtra as escolhas bloqueadas, percorrendo com for comum (sem Stream).
+    public List<Escolha> getEscolhasDisponiveis(Protagonista protagonista) {
+        List<Escolha> disponiveis = new ArrayList<>();
+        for (Escolha escolha : escolhas) {
+            if (escolha.estaDisponivel(protagonista)) {
+                disponiveis.add(escolha);
+            }
+        }
+        return disponiveis;
+    }
+}
+
+
+import java.util.ArrayList;
+import java.util.List;
+ 
+public class Capitulo {
+ 
+    private int id;
+    private String titulo;
+    private List<Cena> cenas;
+ 
+    public Capitulo(int id, String titulo) {
+        this.id = id;
+        this.titulo = titulo;
+        this.cenas = new ArrayList<>();
+    }
+ 
+    public int getId() {
+        return id;
+    }
+ 
+    public String getTitulo() {
+        return titulo;
+    }
+ 
+    public List<Cena> getCenas() {
+        return cenas;
+    }
+ 
+    public void adicionarCena(Cena cena) {
+        cenas.add(cena);
+    }
+ 
+    // Busca simples em lista (for comum), sem Map.
+    public Cena getCena(int id) {
+        for (Cena cena : cenas) {
+            if (cena.getId() == id) {
+                return cena;
+            }
+        }
+        return null;
+    }
+ 
+    public Cena getCenaInicial() {
+        return cenas.get(0);
+    }
+}
