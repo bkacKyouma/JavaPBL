@@ -1,0 +1,325 @@
+package models;
+ 
+// NOVO: não existia. Traço fixo escolhido na criação da Protagonista
+// (sangue-frio / equilibrada / sangue-quente), usado a partir do Capítulo 2
+// para comparar com o tom da fala escolhida.
+public enum Temperamento {
+    SANGUE_FRIO,
+    EQUILIBRADA,
+    SANGUE_QUENTE
+}
+
+package models;
+
+// NOVO: não existia. Cena não tinha como se diferenciar (interrogatório,
+// flashback, interlúdio, decisão final). Usado pelo Controller pra decidir
+// como renderizar a cena e, no Capítulo 5, pra disparar a lógica especial
+// de decisão do destino do Bruno.
+public enum TipoCena {
+    INTERROGATORIO,
+    FLASHBACK,
+    INTERLUDIO,
+    DECISAO
+}
+
+
+package models;
+ 
+// NOVO: não existia. Fixada na Cena 2 do Capítulo 4 (fúria vs. dúvida) e
+// consultada no Capítulo 5 pra decidir qual variante de fala a Protagonista
+// tem na cena com Passos.
+public enum PosturaPaternidade {
+    INDEFINIDA,
+    NEGACAO_TOTAL,
+    DUVIDA_ABERTA
+}
+
+
+package models;
+
+// NOVO: não existia. Substitui o que seria o antigo
+// "List<Integer> caracteristicas" da Protagonista — aqui os três atributos
+// têm nome próprio e método próprio, em vez de índice mágico numa lista.
+public class Atributos {
+
+    private int memoria;
+    private int estabilidadeEmocional;
+    private int culpaPercebida;
+
+    public Atributos() {
+        this.memoria = 0;
+        this.estabilidadeEmocional = 50;
+        this.culpaPercebida = 50;
+    }
+
+    public void ajustarMemoria(int delta) { memoria = clamp(memoria + delta); }
+    public void ajustarEstabilidade(int delta) { estabilidadeEmocional = clamp(estabilidadeEmocional + delta); }
+    public void ajustarCulpa(int delta) { culpaPercebida = clamp(culpaPercebida + delta); }
+
+    public int getMemoria() { return memoria; }
+    public int getEstabilidade() { return estabilidadeEmocional; }
+    public int getCulpa() { return culpaPercebida; }
+
+    private int clamp(int valor) { return Math.max(0, Math.min(100, valor)); }
+}
+
+
+package models;
+ 
+// NOVO: não existia. Representa UM vínculo (ex: Protagonista <-> Fauan).
+public class Relacionamento {
+ 
+    private final String personagemAlvo;
+    private int valor;
+ 
+    public Relacionamento(String personagemAlvo, int valorInicial) {
+        this.personagemAlvo = personagemAlvo;
+        this.valor = valorInicial;
+    }
+ 
+    public void ajustar(int delta) {
+        valor = Math.max(0, Math.min(100, valor + delta));
+    }
+ 
+    public int getValor() { return valor; }
+    public String getPersonagemAlvo() { return personagemAlvo; }
+}
+
+
+package models;
+
+import java.util.HashMap;
+import java.util.Map;
+
+// NOVO: não existia em lugar nenhum do fragmento original. Guarda os 3
+// vínculos exigidos (confFauan, vincPassos, suspToin) num mapa só, em vez
+// de precisar de 3 campos soltos na Protagonista.
+public class GerenciadorRelacionamentos {
+
+    private final Map<String, Relacionamento> vinculos;
+
+    public GerenciadorRelacionamentos() {
+        this.vinculos = new HashMap<>();
+    }
+
+    public void registrar(String personagem, int valorInicial) {
+        vinculos.put(personagem, new Relacionamento(personagem, valorInicial));
+    }
+
+    public void ajustar(String personagem, int delta) {
+        Relacionamento vinculo = vinculos.get(personagem);
+        if (vinculo == null) {
+            throw new IllegalArgumentException("Vínculo não registrado: " + personagem);
+        }
+        vinculo.ajustar(delta);
+    }
+
+    public int getValor(String personagem) {
+        Relacionamento vinculo = vinculos.get(personagem);
+        return vinculo == null ? 0 : vinculo.getValor();
+    }
+}
+
+
+package models;
+
+// NOVO: não existia. Sem isso, Efeito e CondicaoAcesso não teriam um jeito
+// limpo de "ver o jogo inteiro" (protagonista + cena atual + destino do
+// Bruno) sem precisar de parâmetros soltos espalhados por todo método.
+public class EstadoJogo {
+
+    private final Protagonista protagonista;
+    private int cenaAtualId;
+    private Boolean destinoBrunoVivo; // null até ser decidido no Capítulo 5
+
+    public EstadoJogo(Protagonista protagonista) {
+        this.protagonista = protagonista;
+    }
+
+    public Protagonista getProtagonista() { return protagonista; }
+
+    public void avancarPara(int cenaId) { this.cenaAtualId = cenaId; }
+    public int getCenaAtualId() { return cenaAtualId; }
+
+    public void definirDestinoBruno(boolean vivo) { this.destinoBrunoVivo = vivo; }
+    public Boolean getDestinoBruno() { return destinoBrunoVivo; }
+}
+
+
+
+
+package models;
+ 
+// NOVO: não existia. Sem isso a Escolha 5C do Capítulo 1 (só aparece com
+// suspeita alta + pista) era impossível de representar.
+public interface CondicaoAcesso {
+    boolean avaliar(EstadoJogo estado);
+}
+
+
+
+package models;
+ 
+// NOVO.
+public class CondicaoAtributoMinimo implements CondicaoAcesso {
+ 
+    public enum TipoAtributo { MEMORIA, ESTABILIDADE, CULPA }
+ 
+    private final TipoAtributo tipo;
+    private final int valorMinimo;
+ 
+    public CondicaoAtributoMinimo(TipoAtributo tipo, int valorMinimo) {
+        this.tipo = tipo;
+        this.valorMinimo = valorMinimo;
+    }
+ 
+    @Override
+    public boolean avaliar(EstadoJogo estado) {
+        Atributos atributos = estado.getProtagonista().getAtributos();
+        int valorAtual;
+        switch (tipo) {
+            case MEMORIA: valorAtual = atributos.getMemoria(); break;
+            case ESTABILIDADE: valorAtual = atributos.getEstabilidade(); break;
+            default: valorAtual = atributos.getCulpa();
+        }
+        return valorAtual >= valorMinimo;
+    }
+}
+
+
+
+package models;
+
+// NOVO.
+public class CondicaoRelacionamentoMinimo implements CondicaoAcesso {
+
+    private final String personagem;
+    private final int valorMinimo;
+
+    public CondicaoRelacionamentoMinimo(String personagem, int valorMinimo) {
+        this.personagem = personagem;
+        this.valorMinimo = valorMinimo;
+    }
+
+    @Override
+    public boolean avaliar(EstadoJogo estado) {
+        return estado.getProtagonista().getRelacionamentos().getValor(personagem) >= valorMinimo;
+    }
+}
+
+
+
+
+package models;
+
+// NOVO.
+public class CondicaoPistaPresente implements CondicaoAcesso {
+
+    private final String nomePista;
+
+    public CondicaoPistaPresente(String nomePista) {
+        this.nomePista = nomePista;
+    }
+
+    @Override
+    public boolean avaliar(EstadoJogo estado) {
+        return estado.getProtagonista().getInventario().possuiPista(nomePista);
+    }
+}
+
+
+
+
+package models;
+ 
+import java.util.ArrayList;
+import java.util.List;
+ 
+// NOVO: combina várias condições com E lógico (ex: relacionamento mínimo
+// COM Toin E posse da pista, ao mesmo tempo).
+public class CondicaoComposta implements CondicaoAcesso {
+ 
+    private final List<CondicaoAcesso> condicoes;
+ 
+    public CondicaoComposta() {
+        this.condicoes = new ArrayList<>();
+    }
+ 
+    public void adicionar(CondicaoAcesso condicao) {
+        condicoes.add(condicao);
+    }
+ 
+    @Override
+    public boolean avaliar(EstadoJogo estado) {
+        for (CondicaoAcesso c : condicoes) {
+            if (!c.avaliar(estado)) return false;
+        }
+        return true;
+    }
+}
+
+
+
+package models;
+
+// NOVO: não existia. Sem isso, Escolha não tinha NENHUMA consequência real
+// — só apontava pra próxima cena.
+public class Efeito {
+
+    public enum Alvo { MEMORIA, ESTABILIDADE, CULPA, RELACIONAMENTO }
+
+    private final Alvo alvo;
+    private final int delta;
+    private final String personagemRelacionado; // só usado se alvo == RELACIONAMENTO
+
+    public Efeito(Alvo alvo, int delta) {
+        this(alvo, delta, null);
+    }
+
+    public Efeito(Alvo alvo, int delta, String personagemRelacionado) {
+        this.alvo = alvo;
+        this.delta = delta;
+        this.personagemRelacionado = personagemRelacionado;
+    }
+
+    public void aplicar(EstadoJogo estado) {
+        Atributos atributos = estado.getProtagonista().getAtributos();
+        switch (alvo) {
+            case MEMORIA: atributos.ajustarMemoria(delta); break;
+            case ESTABILIDADE: atributos.ajustarEstabilidade(delta); break;
+            case CULPA: atributos.ajustarCulpa(delta); break;
+            case RELACIONAMENTO:
+                estado.getProtagonista().getRelacionamentos().ajustar(personagemRelacionado, delta);
+                break;
+        }
+    }
+}
+
+
+package models;
+ 
+// NOVO: não existia nada que rastreasse os finais possíveis. Cada Final
+// se auto-descreve como uma combinação de (brunoVivo, culpadoEhToin).
+public class Final {
+ 
+    private final String nome;
+    private final String descricaoEpilogo;
+    private final boolean brunoVivo;
+    private final boolean culpadoEhToin;
+ 
+    public Final(String nome, String descricaoEpilogo, boolean brunoVivo, boolean culpadoEhToin) {
+        this.nome = nome;
+        this.descricaoEpilogo = descricaoEpilogo;
+        this.brunoVivo = brunoVivo;
+        this.culpadoEhToin = culpadoEhToin;
+    }
+ 
+    public boolean corresponde(boolean brunoVivo, boolean culpadoEhToin) {
+        return this.brunoVivo == brunoVivo && this.culpadoEhToin == culpadoEhToin;
+    }
+ 
+    public String getNome() { return nome; }
+    public String getDescricaoEpilogo() { return descricaoEpilogo; }
+}
+
+
