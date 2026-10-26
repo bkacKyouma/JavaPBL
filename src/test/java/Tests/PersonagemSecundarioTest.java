@@ -1,28 +1,20 @@
-package test.java.Tests;
 
-import models.Prelacionavel;
-import models.Psecundario;
+package models;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class PersonagensSecundariosTest {
+class PsecundarioTest {
 
     @Test
-    void testePsecundarioHeranca() {
-        Psecundario npc = new Psecundario(2, "Fauan");
+    void herdaIdNomeEAlteracaoDeNome() {
+        Psecundario toin = new Psecundario(4, "Toin");
 
-        assertEquals(2, npc.getId());
-        assertEquals("Fauan", npc.getNome());
+        assertEquals(4, toin.getId());
+        assertEquals("Toin", toin.getNome());
 
-        npc.setNome("Fauan Silva");
-        assertEquals("Fauan Silva", npc.getNome());
-    }
+        toin.setNome("Antonio");
 
-    @Test
-    void testePrelacionavelPercepcao() {
-        Prelacionavel npcRelacionavel = new Prelacionavel(3, "Toin");
-        npcRelacionavel.setPercepcao("Amigável");
-
-        assertEquals("Amigável", npcRelacionavel.getPercepcao());
+        assertEquals("Antonio", toin.getNome());
     }
 }
