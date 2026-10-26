@@ -1,42 +1,49 @@
-package test.java.Tests;
 
-import models.Cena;
-import models.Escolha;
-import models.Protagonista;
+package models;
+
 import org.junit.jupiter.api.Test;
-import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
-
 
 class CenaTest {
 
     @Test
-    void testeGetEscolhasDisponiveisFiltraCorretamente() {
-        Protagonista protagonista = new Protagonista(1, "Kat", "EQUILIBRADO");
-        Cena cena = new Cena(1, "Sala", "Você vê duas portas.", "Interativa");
+    void filtraEscolhasQueNaoCumpriramCondicoes() {
+        Protagonista p = new Protagonista(1, "Katarina", "EQUILIBRADO");
 
-        Escolha escolhaLivre = new Escolha(1, "Entrar na esquerda", 2);
+        Cena cena = new Cena(404, "O alarme", "Texto", "INTERROGATORIO");
 
-        Escolha escolhaBloqueada = new Escolha(2, "Entrar na direita", 3);
-        escolhaBloqueada.definirCondicao(null, 0, "SANGUE_FRIO"); // Protagonista não tem esse temperamento
+        Escolha livre = new Escolha(1, "Investigar", 405);
+        Escolha bloqueada = new Escolha(2, "Acusar", 405);
 
-        cena.adicionarEscolha(escolhaLivre);
-        cena.adicionarEscolha(escolhaBloqueada);
+        bloqueada.definirCondicao("Toin", 70, null);
 
-        List<Escolha> disponiveis = cena.getEscolhasDisponiveis(protagonista);
+        cena.adicionarEscolha(livre);
+        cena.adicionarEscolha(bloqueada);
 
-        // Deve retornar apenas a escolha que passa na validação do método estaDisponivel[cite: 3]
-        assertEquals(1, disponiveis.size());
-        assertEquals(1, disponiveis.get(0).getId());
+        assertEquals(1, cena.getEscolhasDisponiveis(p).size());
+        assertSame(livre, cena.getEscolhasDisponiveis(p).get(0));
+
+        p.ajustarSuspeitaToin(20);
+
+        assertEquals(2, cena.getEscolhasDisponiveis(p).size());
     }
 
     @Test
-    void testeProximaCenaPadrao() {
-        Cena cena = new Cena(1, "Sala", "Você vê duas portas.", "Interativa");
-        // -1 significa que não existe próxima cena automática inicialmente[cite: 3]
+    void guardaDialogosETransicaoAutomatica() {
+        Cena cena = new Cena(106, "Transicao", "Texto", "NARRATIVA");
+
         assertEquals(-1, cena.getProximaCenaId());
 
-        cena.definirProximaCena(5);
-        assertEquals(5, cena.getProximaCenaId());
+        cena.definirProximaCena(201);
+        cena.adicionarDialogo(
+                new Dialogo("Fauan", "Vamos continuar", "FALA")
+        );
+
+        assertEquals(106, cena.getId());
+        assertEquals("Transicao", cena.getTitulo());
+        assertEquals("Texto", cena.getTextoNarrativa());
+        assertEquals("NARRATIVA", cena.getTipo());
+        assertEquals(201, cena.getProximaCenaId());
+        assertEquals(1, cena.getDialogos().size());
     }
 }
