@@ -1,15 +1,19 @@
-package test.java.Tests;
+
+package models;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import models.Pista;
+
 class PistaTest {
 
     @Test
-    void testeCriacaoPista() {
-        Pista pista = new Pista("Bilhete", "Um bilhete rasgado");
+    void preservaNomeEDescricao() {
+        Pista pista = new Pista(
+                "Pergunta sobre o alarme",
+                "Toin perguntou pelo alarme."
+        );
 
-        assertEquals("Bilhete", pista.getNome());
-        assertEquals("Um bilhete rasgado", pista.getDescricao());
+        assertEquals("Pergunta sobre o alarme", pista.getNome());
+        assertEquals("Toin perguntou pelo alarme.", pista.getDescricao());
     }
 }
