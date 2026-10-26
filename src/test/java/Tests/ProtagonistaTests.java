@@ -1,66 +1,62 @@
-package test.java.Tests;
 
-import org.junit.jupiter.api.BeforeEach;
+package models;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import models.Protagonista;
-import models.Pista;
+
 class ProtagonistaTest {
 
-    private Protagonista protagonista;
+    @Test
+    void iniciaComOsValoresDoJogo() {
+        Protagonista p = new Protagonista(1, "Katarina", "SANGUE_FRIO");
 
-    @BeforeEach
-    void setUp() {
-        // Inicializa um novo protagonista antes de cada teste para garantir isolamento
-        protagonista = new Protagonista(1, "Kat", "Melancólica");
+        assertEquals(0, p.getMemoria());
+        assertEquals(50, p.getEstabilidadeEmocional());
+        assertEquals(50, p.getCulpaPercebida());
+        assertEquals(50, p.getConfiancaFauan());
+        assertEquals(50, p.getVinculoPassos());
+        assertEquals(50, p.getSuspeitaToin());
+        assertEquals("INDEFINIDA", p.getPosturaPaternidade());
+        assertTrue(p.getPistas().isEmpty());
     }
 
     @Test
-    void testeInicializacaoValoresPadrao() {
-        assertEquals("Melancólica", protagonista.getTemperamento());
-        assertEquals(0, protagonista.getMemoria());
-        assertEquals(50, protagonista.getEstabilidadeEmocional());
-        assertEquals("INDEFINIDA", protagonista.getPosturaPaternidade());
-        assertTrue(protagonista.getPistas().isEmpty());
+    void limitaAtributosERelacionamentosEntreZeroECem() {
+        Protagonista p = new Protagonista(1, "Katarina", "EQUILIBRADO");
+
+        p.ajustarMemoria(500);
+        p.ajustarEstabilidade(-500);
+        p.ajustarCulpa(500);
+        p.ajustarConfiancaFauan(-500);
+        p.ajustarVinculoPassos(500);
+        p.ajustarSuspeitaToin(-500);
+
+        assertEquals(100, p.getMemoria());
+        assertEquals(0, p.getEstabilidadeEmocional());
+        assertEquals(100, p.getCulpaPercebida());
+        assertEquals(0, p.getConfiancaFauan());
+        assertEquals(100, p.getVinculoPassos());
+        assertEquals(0, p.getSuspeitaToin());
     }
 
     @Test
-    void testeAjustarMemoriaDentroDoLimite() {
-        protagonista.ajustarMemoria(20);
-        assertEquals(20, protagonista.getMemoria());
+    void impedeRepeticaoDePistasPeloNome() {
+        Protagonista p = new Protagonista(1, "Katarina", "SANGUE_QUENTE");
+
+        p.adicionarPista(new Pista("Cheiro de gasolina", "Primeira descricao"));
+        p.adicionarPista(new Pista("Cheiro de gasolina", "Outra descricao"));
+
+        assertTrue(p.possuiPista("Cheiro de gasolina"));
+        assertFalse(p.possuiPista("Sombra desconhecida"));
+        assertEquals(1, p.getPistas().size());
     }
 
     @Test
-    void testeLimiteSuperiorCento() {
-        // O valor inicial da estabilidade é 50. Somar 60 daria 110.
-        protagonista.ajustarEstabilidade(60);
-        assertEquals(100, protagonista.getEstabilidadeEmocional(), "O valor não deve ultrapassar 100");
-    }
+    void atualizaPosturaSobrePaternidade() {
+        Protagonista p = new Protagonista(1, "Katarina", "SANGUE_FRIO");
 
-    @Test
-    void testeLimiteInferiorZero() {
-        // O valor inicial de suspeitaToin é 50. Subtrair 60 daria -10.
-        protagonista.ajustarSuspeitaToin(-60);
-        assertEquals(0, protagonista.getSuspeitaToin(), "O valor não deve ser menor que 0");
-    }
+        p.setPosturaPaternidade("DUVIDA_ABERTA");
 
-    @Test
-    void testeAdicionarPistaNova() {
-        Pista pista = new Pista("Faca", "Encontrada na cozinha");
-        protagonista.adicionarPista(pista);
-
-        assertEquals(1, protagonista.getPistas().size());
-        assertTrue(protagonista.possuiPista("Faca"));
-    }
-
-    @Test
-    void testeNaoAdicionarPistaDuplicada() {
-        Pista pista1 = new Pista("Faca", "Encontrada na cozinha");
-        Pista pista2 = new Pista("Faca", "Mesma pista, objeto diferente em memória");
-
-        protagonista.adicionarPista(pista1);
-        protagonista.adicionarPista(pista2); // Não deve ser adicionada pois o nome é igual
-
-        assertEquals(1, protagonista.getPistas().size(), "Pistas com o mesmo nome não devem ser duplicadas");
+        assertEquals("DUVIDA_ABERTA", p.getPosturaPaternidade());
     }
 }
