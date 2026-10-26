@@ -1,62 +1,73 @@
-package test.java.Tests;
 
-import org.junit.jupiter.api.BeforeEach;
+package models;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import models.EstadoJogo;
-import models.Cena;
-import models.Protagonista;
-import models.Capitulo;
-
 
 class EstadoJogoTest {
 
-    private EstadoJogo estadoJogo;
-    private Capitulo capitulo1;
-    private Cena cena1;
-    private Cena cena2;
+    private EstadoJogo construir() {
+        EstadoJogo estado = new EstadoJogo(
+                new Protagonista(1, "Katarina", "SANGUE_FRIO")
+        );
 
-    @BeforeEach
-    void setUp() {
-        Protagonista kat = new Protagonista(1, "Kat", "EQUILIBRADO");
-        estadoJogo = new EstadoJogo(kat);
+        Capitulo um = new Capitulo(1, "Primeiro");
+        Capitulo dois = new Capitulo(2, "Segundo");
 
-        capitulo1 = new Capitulo(1, "O Início");
-        cena1 = new Cena(101, "Acordando", "Você acorda.", "Narrativa");
-        cena2 = new Cena(102, "Corredor", "Um corredor escuro.", "Exploração");
+        um.adicionarCena(
+                new Cena(101, "Inicio", "Narrativa", "NARRATIVA")
+        );
 
-        capitulo1.adicionarCena(cena1);
-        capitulo1.adicionarCena(cena2);
-        estadoJogo.adicionarCapitulo(capitulo1);
+        dois.adicionarCena(
+                new Cena(201, "Meio", "Narrativa", "NARRATIVA")
+        );
+
+        estado.adicionarCapitulo(um);
+        estado.adicionarCapitulo(dois);
+
+        return estado;
     }
 
     @Test
-    void testeIniciarJogo() {
-        estadoJogo.iniciarJogo();
+    void iniciaAvancaEncerraEReiniciaPosicao() {
+        EstadoJogo e = construir();
 
-        // O jogo deve iniciar no primeiro capítulo e na sua primeira cena[cite: 3]
-        assertEquals(capitulo1, estadoJogo.getCapituloAtual());
-        assertEquals(cena1, estadoJogo.getCenaAtual());
-        assertFalse(estadoJogo.isJogoEncerrado());
-        assertNull(estadoJogo.getFinalAlcancado());
+        e.iniciarJogo();
+
+        assertEquals(101, e.getCenaAtual().getId());
+        assertEquals(1, e.getCapituloAtual().getId());
+
+        assertTrue(e.irParaCena(201));
+        assertEquals(2, e.getCapituloAtual().getId());
+
+        assertFalse(e.irParaCena(999));
+        assertEquals(201, e.getCenaAtual().getId());
+
+        e.encerrarJogo("FINAL_TESTE");
+
+        assertTrue(e.isJogoEncerrado());
+        assertEquals("FINAL_TESTE", e.getFinalAlcancado());
+
+        e.reiniciarPosicao();
+
+        assertFalse(e.isJogoEncerrado());
+        assertNull(e.getFinalAlcancado());
+        assertEquals(101, e.getCenaAtual().getId());
     }
 
     @Test
-    void testeIrParaCenaExistente() {
-        estadoJogo.iniciarJogo();
-        boolean encontrou = estadoJogo.irParaCena(102);
+    void guardaPersonagensESuaProtagonista() {
+        EstadoJogo e = construir();
+        Psecundario fauan = new Psecundario(2, "Fauan");
 
-        // A transição procura a cena em todos os capítulos e atualiza os ponteiros[cite: 3]
-        assertTrue(encontrou);
-        assertEquals(cena2, estadoJogo.getCenaAtual());
-    }
+        e.adicionarPersonagem(fauan);
 
-    @Test
-    void testeIrParaCenaInexistente() {
-        estadoJogo.iniciarJogo();
-        boolean encontrou = estadoJogo.irParaCena(999);
-
-        assertFalse(encontrou);
-        assertEquals(cena1, estadoJogo.getCenaAtual(), "A cena atual não deve mudar se a busca falhar");
+        assertSame(fauan, e.getPersonagem(2));
+        assertNull(e.getPersonagem(42));
+        assertEquals(1, e.getPersonagens().size());
+        assertEquals(2, e.getCapitulos().size());
+        assertEquals("Katarina", e.getProtagonista().getNome());
+        assertNotNull(e.getCapitulo(2));
+        assertNull(e.getCapitulo(7));
     }
 }
