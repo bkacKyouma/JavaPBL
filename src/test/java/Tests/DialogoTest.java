@@ -1,20 +1,21 @@
-package Tests;
 
+package models;
 
-import models.Dialogo;
-import models.Psecundario;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DialogoTest {
 
     @Test
-    void testeCriacaoDialogo() {
-        Psecundario npc = new Psecundario(2, "Toin");
-        Dialogo dialogo = new Dialogo("npc", "Onde você estava?", "Interrogação");
+    void preservaOsDadosDaFala() {
+        Dialogo d = new Dialogo(
+                "Fauan",
+                "O que aconteceu?",
+                "FALA"
+        );
 
-        assertEquals(npc, dialogo.getPersonagem());
-        assertEquals("Onde você estava?", dialogo.getConteudo());
-        assertEquals("Interrogação", dialogo.getTipo());
+        assertEquals("Fauan", d.getPersonagem());
+        assertEquals("O que aconteceu?", d.getConteudo());
+        assertEquals("FALA", d.getTipo());
     }
 }
