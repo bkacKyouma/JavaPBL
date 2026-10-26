@@ -1,24 +1,62 @@
-package test.java.Tests;
 
+package models;
 
-import models.Capitulo;
-import models.Cena;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class CapituloTest {
+class ProtagonistaTest {
 
     @Test
-    void testeBuscaDeCenasNoCapitulo() {
-        Capitulo cap = new Capitulo(1, "Capítulo 1");
-        Cena cena1 = new Cena(10, "Início", "...", "Narrativa");
-        Cena cena2 = new Cena(20, "Meio", "...", "Ação");
+    void iniciaComOsValoresDoJogo() {
+        Protagonista p = new Protagonista(1, "Katarina", "SANGUE_FRIO");
 
-        cap.adicionarCena(cena1);
-        cap.adicionarCena(cena2);
+        assertEquals(0, p.getMemoria());
+        assertEquals(50, p.getEstabilidadeEmocional());
+        assertEquals(50, p.getCulpaPercebida());
+        assertEquals(50, p.getConfiancaFauan());
+        assertEquals(50, p.getVinculoPassos());
+        assertEquals(50, p.getSuspeitaToin());
+        assertEquals("INDEFINIDA", p.getPosturaPaternidade());
+        assertTrue(p.getPistas().isEmpty());
+    }
 
-        assertEquals(cena1, cap.getCenaInicial(), "Deve retornar o índice 0 da lista[cite: 3]");
-        assertEquals(cena2, cap.getCena(20), "A busca por ID deve encontrar a cena correta[cite: 3]");
-        assertNull(cap.getCena(99), "Deve retornar null para ID inexistente[cite: 3]");
+    @Test
+    void limitaAtributosERelacionamentosEntreZeroECem() {
+        Protagonista p = new Protagonista(1, "Katarina", "EQUILIBRADO");
+
+        p.ajustarMemoria(500);
+        p.ajustarEstabilidade(-500);
+        p.ajustarCulpa(500);
+        p.ajustarConfiancaFauan(-500);
+        p.ajustarVinculoPassos(500);
+        p.ajustarSuspeitaToin(-500);
+
+        assertEquals(100, p.getMemoria());
+        assertEquals(0, p.getEstabilidadeEmocional());
+        assertEquals(100, p.getCulpaPercebida());
+        assertEquals(0, p.getConfiancaFauan());
+        assertEquals(100, p.getVinculoPassos());
+        assertEquals(0, p.getSuspeitaToin());
+    }
+
+    @Test
+    void impedeRepeticaoDePistasPeloNome() {
+        Protagonista p = new Protagonista(1, "Katarina", "SANGUE_QUENTE");
+
+        p.adicionarPista(new Pista("Cheiro de gasolina", "Primeira descricao"));
+        p.adicionarPista(new Pista("Cheiro de gasolina", "Outra descricao"));
+
+        assertTrue(p.possuiPista("Cheiro de gasolina"));
+        assertFalse(p.possuiPista("Sombra desconhecida"));
+        assertEquals(1, p.getPistas().size());
+    }
+
+    @Test
+    void atualizaPosturaSobrePaternidade() {
+        Protagonista p = new Protagonista(1, "Katarina", "SANGUE_FRIO");
+
+        p.setPosturaPaternidade("DUVIDA_ABERTA");
+
+        assertEquals("DUVIDA_ABERTA", p.getPosturaPaternidade());
     }
 }
