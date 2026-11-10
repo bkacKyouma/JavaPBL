@@ -10,12 +10,16 @@ do código, e estou ciente que estes trechos não serão considerados para fins 
 ******************************************************************************************/
 
 import controllers.MenuController;
+import javafx.application.Application;
+import views.MenuViewFX;
 
 public class Main {
     public static void main(String[] args) {
         Boolean sair = false;
 
         while (!sair) {
+            Application.launch(MenuViewFX.class, "");
+
             sair = MenuController.menuPrincipalController();
         }
 
