@@ -1,0 +1,134 @@
+/* Identidade visual: noir de investigação com luz de brasa */
+.root {
+    -destaque: #7fd68c;
+    -fundo-1: #0d0908;
+    -fundo-2: #2a120a;
+    -texto: #ece4da;
+    -texto-suave: #a89a8c;
+    -painel: rgba(255, 255, 255, 0.06);
+    -fx-font-family: "Georgia", "DejaVu Serif", serif;
+    -fx-font-size: 15px;
+    -fx-background-color: linear-gradient(to bottom, -fundo-1, -fundo-2);
+}
+
+.label { -fx-text-fill: -texto; }
+
+.titulo {
+    -fx-font-size: 46px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -destaque;
+    -fx-text-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(255, 110, 20, 0.55), 28, 0.25, 0, 0);
+}
+.subtitulo { -fx-text-fill: -texto-suave; -fx-font-size: 16px; -fx-font-style: italic; }
+.divisor { -fx-background-color: linear-gradient(to right, transparent, -destaque, transparent); -fx-min-height: 2; -fx-max-height: 2; }
+.tela-titulo { -fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: -destaque; }
+.secao { -fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: -destaque; }
+.suave { -fx-text-fill: -texto-suave; }
+.cena-titulo { -fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: -destaque; }
+.narrativa { -fx-font-style: italic; -fx-text-fill: -texto-suave; -fx-font-size: 16px; }
+.selo { -fx-text-fill: #1a0f0a; -fx-background-color: -destaque; -fx-padding: 2 10; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; }
+.falante { -fx-font-weight: bold; -fx-text-fill: -destaque; }
+.fala { -fx-font-size: 16px; }
+.balao { -fx-background-color: -painel; -fx-border-color: -destaque; -fx-border-width: 0 0 0 3; -fx-padding: 10 14; }
+
+.botao-menu {
+    -fx-background-color: transparent;
+    -fx-border-color: -destaque;
+    -fx-border-width: 1;
+    -fx-text-fill: -destaque;
+    -fx-padding: 8 24;
+    -fx-min-width: 300;
+    -fx-cursor: hand;
+}
+.botao-menu:hover { -fx-background-color: -destaque; -fx-text-fill: #1a0f0a; }
+.botao-menu:disabled { -fx-opacity: 0.3; }
+
+.botao-pequeno {
+    -fx-background-color: transparent;
+    -fx-border-color: -texto-suave;
+    -fx-text-fill: -texto;
+    -fx-padding: 5 14;
+    -fx-cursor: hand;
+}
+.botao-pequeno:hover { -fx-border-color: -destaque; -fx-text-fill: -destaque; }
+.botao-pequeno:disabled { -fx-opacity: 0.3; }
+
+.botao-escolha {
+    -fx-background-color: -painel;
+    -fx-border-color: -texto-suave;
+    -fx-text-fill: -texto;
+    -fx-padding: 12 16;
+    -fx-alignment: center-left;
+    -fx-text-alignment: left;
+    -fx-cursor: hand;
+}
+.botao-escolha:hover { -fx-border-color: -destaque; -fx-background-color: rgba(255, 255, 255, 0.12); }
+
+.carta {
+    -fx-background-color: -painel;
+    -fx-border-color: -texto-suave;
+    -fx-padding: 16;
+    -fx-text-fill: -texto;
+    -fx-alignment: top-left;
+    -fx-text-alignment: left;
+    -fx-cursor: hand;
+}
+.carta:hover { -fx-border-color: -destaque; }
+.carta:selected { -fx-border-color: -destaque; -fx-border-width: 2; -fx-background-color: rgba(255, 255, 255, 0.14); }
+
+.painel { -fx-background-color: -painel; -fx-padding: 14; }
+.slot { -fx-background-color: -painel; -fx-border-color: -texto-suave; -fx-padding: 12 16; }
+
+.chip { -fx-padding: 3 10; -fx-background-radius: 10; -fx-font-size: 13px; }
+.chip-positivo { -fx-background-color: rgba(100, 200, 120, 0.25); }
+.chip-negativo { -fx-background-color: rgba(230, 90, 80, 0.30); }
+.chip-info { -fx-background-color: rgba(240, 190, 80, 0.25); }
+.chip-erro { -fx-background-color: rgba(230, 60, 60, 0.55); }
+
+.progress-bar > .track { -fx-background-color: rgba(255, 255, 255, 0.12); -fx-background-radius: 4; }
+.progress-bar > .bar { -fx-background-color: -destaque; -fx-background-radius: 4; -fx-padding: 4; }
+
+.scroll-pane { -fx-background-color: transparent; -fx-background: transparent; }
+.scroll-pane > .viewport { -fx-background-color: transparent; }
+
+.text-field { -fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: -texto; }
+.check-box { -fx-text-fill: -texto; }
+.check-box .label { -fx-text-fill: -texto; }
+
+.dialog-pane { -fx-background-color: #1c110d; }
+.dialog-pane .label { -fx-text-fill: #ece4da; }
+.dialog-pane .button { -fx-background-color: transparent; -fx-border-color: #a89a8c; -fx-text-fill: #ece4da; }
+.dialog-pane .button:hover { -fx-border-color: #f2c14e; }
+
+.scroll-bar { -fx-background-color: transparent; }
+.scroll-bar > .track { -fx-background-color: transparent; }
+.scroll-bar > .thumb { -fx-background-color: rgba(255, 255, 255, 0.25); -fx-background-radius: 4; }
+.scroll-bar > .increment-button, .scroll-bar > .decrement-button { -fx-background-color: transparent; -fx-padding: 0; }
+.scroll-bar > .increment-button > .increment-arrow, .scroll-bar > .decrement-button > .decrement-arrow { -fx-shape: " "; -fx-padding: 0; }
+.progress-bar > .bar { -fx-background-insets: 0; -fx-padding: 5; }
+.progress-bar > .track { -fx-background-insets: 0; }
+
+.dialog-pane > .header-panel { -fx-background-color: #2a1a14; }
+.dialog-pane > .header-panel .label { -fx-text-fill: #f2c14e; -fx-font-weight: bold; }
+.dialog-pane > .content { -fx-background-color: #1c110d; }
+
+/* Contorno escuro global nos textos para legibilidade sobre qualquer cenário */
+.label .text,
+.button .text,
+.toggle-button .text,
+.check-box .text {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.96), 3, 0.88, 0, 0);
+}
+
+.titulo .text,
+.tela-titulo .text,
+.cena-titulo .text {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.98), 5, 0.85, 0, 0);
+}
+
+/* Remove o contorno escuro onde o texto é escuro sobre fundo claro */
+.selo .text,
+.botao-menu:hover .text {
+    -fx-effect: null;
+}

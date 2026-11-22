@@ -1,0 +1,9 @@
+classpath:/home/kyouma/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.15.2/jackson-databind-2.15.2.jar	1620088:1685489257000
+classpath:/home/kyouma/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.15.2/jackson-annotations-2.15.2.jar	75567:1685478841000
+classpath:/home/kyouma/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.15.2/jackson-core-2.15.2.jar	549207:1685485055000
+classpath:/home/kyouma/.m2/repository/org/openjfx/javafx-controls/21.0.2/javafx-controls-21.0.2.jar	306:1705439751000
+classpath:/home/kyouma/.m2/repository/org/openjfx/javafx-controls/21.0.2/javafx-controls-21.0.2-linux.jar	2585170:1705439755000
+classpath:/home/kyouma/.m2/repository/org/openjfx/javafx-graphics/21.0.2/javafx-graphics-21.0.2.jar	306:1705439767000
+classpath:/home/kyouma/.m2/repository/org/openjfx/javafx-graphics/21.0.2/javafx-graphics-21.0.2-linux.jar	4696341:1705439769000
+classpath:/home/kyouma/.m2/repository/org/openjfx/javafx-base/21.0.2/javafx-base-21.0.2.jar	302:1705439743000
+classpath:/home/kyouma/.m2/repository/org/openjfx/javafx-base/21.0.2/javafx-base-21.0.2-linux.jar	753975:1705439748000
