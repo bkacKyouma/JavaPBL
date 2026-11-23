@@ -1,9 +1,9 @@
 {
   "versao" : 1,
-  "dataUltimaModificacao" : 1795366978001,
-  "corPrimaria" : "\u001B[33m",
+  "dataUltimaModificacao" : 1795400511972,
+  "corPrimaria" : "\u001B[32m",
   "corSecundaria" : "\u001B[33m",
   "modo" : "\u001B[1m",
-  "finaisDesbloqueados" : [ "FINAL_KATARINA_INDICIADA_BRUNO_MORTO", "FINAL_TOIN_INDICIADO_BRUNO_MORTO" ],
-  "extrasDesbloqueados" : [ "FIM?", "BRINQUEDO_BRUNO" ]
+  "finaisDesbloqueados" : [ "FINAL_KATARINA_INDICIADA_BRUNO_MORTO", "FINAL_TOIN_INDICIADO_BRUNO_MORTO", "FINAL_TOIN_INDICIADO_BRUNO_VIVO" ],
+  "extrasDesbloqueados" : [ "FIM?", "BRINQUEDO_BRUNO", "ISQUEIRO_TOIN" ]
 }

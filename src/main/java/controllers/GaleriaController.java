@@ -36,9 +36,9 @@ public class GaleriaController {
         itens.add(extra(perfil, "FIM?", "O Fim",
                 "Você alcançou pelo menos um final. Obrigado por jogar e parabéns por zerar o jogo!"));
         itens.add(extra(perfil, "ISQUEIRO_TOIN", "Isqueiro de Toin",
-                "Um objeto que não consta em nenhum registro."));
+                "Toin indiciado, seria essa a 'arma' do crime?"));
         itens.add(extra(perfil, "BRINQUEDO_BRUNO", "Brinquedo de Bruno",
-                "Era o jogo favorito dele..."));
+                "você não conseguiu salvar o bruno"));
 
         return itens;
     }

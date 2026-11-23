@@ -1,0 +1,30 @@
+{
+  "versao" : 1,
+  "slot" : 4,
+  "nomeSave" : "final bom",
+  "dataSalvamento" : 1795399464576,
+  "resumo" : "O VEREDITO - O veredito",
+  "idProtagonista" : 1,
+  "nomeProtagonista" : "Katarina",
+  "temperamento" : "SANGUE_QUENTE",
+  "memoria" : 100,
+  "estabilidadeEmocional" : 15,
+  "culpaPercebida" : 60,
+  "confiancaFauan" : 70,
+  "vinculoPassos" : 80,
+  "suspeitaToin" : 100,
+  "posturaPaternidade" : "NEGACAO_TOTAL",
+  "pistas" : [ {
+    "nome" : "Sombra desconhecida",
+    "descricao" : "Katarina lembra de uma sombra próxima ao quarto de Bruno."
+  }, {
+    "nome" : "Pergunta sobre o alarme",
+    "descricao" : "Toin perguntou se o alarme de incêndio ainda funcionava."
+  }, {
+    "nome" : "Alarme desligado manualmente",
+    "descricao" : "A perícia concluiu que o alarme do quarto de Bruno foi desligado manualmente."
+  } ],
+  "capituloAtualId" : 5,
+  "cenaAtualId" : 504,
+  "brunoSobreviveu" : true
+}

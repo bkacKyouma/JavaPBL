@@ -15,6 +15,8 @@ public class Cena {
     private List<Dialogo> dialogos;
 
     private int proximaCenaId;
+    private String humorProtagonista;
+
 
     public Cena(int id, String titulo, String textoNarrativa, String tipo) {
 
@@ -33,7 +35,13 @@ public class Cena {
     public int getId() {
         return id;
     }
+    public String getHumorProtagonista() {
+        return humorProtagonista;
+    }
 
+    public void setHumorProtagonista(String humorProtagonista) {
+        this.humorProtagonista = humorProtagonista;
+    }
     public String getTitulo() {
         return titulo;
     }

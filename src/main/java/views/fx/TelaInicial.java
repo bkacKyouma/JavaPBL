@@ -33,7 +33,7 @@ public class TelaInicial {
 
         Label titulo = Componentes.rotulo("A NOITE QUE\nNÃO SE APAGA", "titulo");
         titulo.setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
-        Label subtitulo = Componentes.rotulo("um jogo narrativo de investigação", "subtitulo");
+        Label subtitulo = Componentes.rotulo("O pesadelo de katarina", "subtitulo");
 
         Button novo = Componentes.botao("Nova partida", "botao-menu", nav::mostrarCriacao);
 

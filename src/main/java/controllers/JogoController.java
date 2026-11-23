@@ -182,7 +182,7 @@ public class JogoController {
         estadoJogo.adicionarPersonagem(bruno);
     }
 
-    // Registra apenas os sprites isolados por humor para protagonista e personagens secundários.
+    // Registra apenas os sprites isolados (.png) por humor para protagonista e personagens secundários.
     private void registrarSpritesPersonagens() {
         if (estadoJogo == null) {
             return;
@@ -354,6 +354,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena101.setImagem("interrogatorio.jpg");
+        cena101.setHumorProtagonista("destruida");
 
         cena101.adicionarDialogo(
                 new Dialogo(
@@ -405,6 +406,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena111.setImagem("interrogatorio.jpg");
+        cena111.setHumorProtagonista("destruida");
 
         cena111.adicionarDialogo(
                 new Dialogo(
@@ -412,7 +414,7 @@ public class JogoController {
                         "Pra mim, agora, é a mesma coisa. "
                                 + "Me convence do contrário.",
                         "FALA",
-                        "desconfiado"
+                        "surpreso"
                 )
         );
 
@@ -427,6 +429,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena112.setImagem("interrogatorio.jpg");
+        cena112.setHumorProtagonista("destruida");
 
         cena112.adicionarDialogo(
                 new Dialogo(
@@ -449,6 +452,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena102.setImagem("interrogatorio.jpg");
+        cena102.setHumorProtagonista("destruida");
 
         cena102.adicionarDialogo(
                 new Dialogo(
@@ -501,6 +505,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena121.setImagem("interrogatorio.jpg");
+        cena121.setHumorProtagonista("brava");
 
         cena121.adicionarDialogo(
                 new Dialogo(
@@ -523,6 +528,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena122.setImagem("interrogatorio.jpg");
+        cena122.setHumorProtagonista("seria");
 
         cena122.adicionarDialogo(
                 new Dialogo(
@@ -545,6 +551,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena103.setImagem("interrogatorio.jpg");
+        cena103.setHumorProtagonista("pensativa");
 
         cena103.adicionarDialogo(
                 new Dialogo(
@@ -598,6 +605,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena131.setImagem("interrogatorio.jpg");
+        cena131.setHumorProtagonista("pensativa");
 
         cena131.adicionarDialogo(
                 new Dialogo(
@@ -619,6 +627,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena132.setImagem("interrogatorio.jpg");
+        cena132.setHumorProtagonista("seria");
 
         cena132.adicionarDialogo(
                 new Dialogo(
@@ -641,6 +650,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena104.setImagem("interrogatorio.jpg");
+        cena104.setHumorProtagonista("assustada");
 
         cena104.adicionarDialogo(
                 new Dialogo(
@@ -698,6 +708,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena141.setImagem("interrogatorio.jpg");
+        cena141.setHumorProtagonista("assustada");
 
         cena141.adicionarDialogo(
                 new Dialogo(
@@ -719,6 +730,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena142.setImagem("interrogatorio.jpg");
+        cena142.setHumorProtagonista("destruida");
 
         cena142.adicionarDialogo(
                 new Dialogo(
@@ -741,6 +753,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena105.setImagem("interrogatorio.jpg");
+        cena105.setHumorProtagonista("assustada");
 
         cena105.adicionarDialogo(
                 new Dialogo(
@@ -826,6 +839,7 @@ public class JogoController {
                         "NARRATIVA"
                 );
         cena106.setImagem("corredor_fumaça.jpg");
+        cena106.setHumorProtagonista("pensativa");
 
         cena106.definirProximaCena(201);
 
@@ -871,6 +885,7 @@ public class JogoController {
                         "FLASHBACK"
                 );
         cena201.setImagem("sala_de_noite_flashback.jpg");
+        cena201.setHumorProtagonista("pensativa");
 
         cena201.adicionarDialogo(
                 new Dialogo(
@@ -947,6 +962,7 @@ public class JogoController {
                         "FLASHBACK"
                 );
         cena202.setImagem("sala_de_noite_flashback.jpg");
+        cena202.setHumorProtagonista("seria");
 
         cena202.adicionarDialogo(
                 new Dialogo(
@@ -1023,6 +1039,7 @@ public class JogoController {
                         "FLASHBACK"
                 );
         cena203.setImagem("banheiro.jpg");
+        cena203.setHumorProtagonista("assustada");
 
         cena203.adicionarDialogo(
                 new Dialogo(
@@ -1126,6 +1143,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena204.setImagem("interrogatorio.jpg");
+        cena204.setHumorProtagonista("destruida");
 
         cena204.adicionarDialogo(
                 new Dialogo(
@@ -1166,6 +1184,7 @@ public class JogoController {
                         "FLASHBACK"
                 );
         cena301.setImagem("pub.jpg");
+        cena301.setHumorProtagonista("feliz");
 
         cena301.adicionarDialogo(
                 new Dialogo(
@@ -1248,6 +1267,7 @@ public class JogoController {
                         "FLASHBACK"
                 );
         cena302.setImagem("pub.jpg");
+        cena302.setHumorProtagonista("feliz");
 
         cena302.adicionarDialogo(
                 new Dialogo(
@@ -1287,6 +1307,16 @@ public class JogoController {
                         "FLASHBACK"
                 );
         cena401.setImagem("quarto_bruno_flashback.jpg");
+        cena401.setHumorProtagonista("pensativa");
+
+        cena401.adicionarDialogo(
+                new Dialogo(
+                        bruno.getNome(),
+                        "",
+                        "SPRITE",
+                        "feliz"
+                )
+        );
 
         cena401.adicionarDialogo(
                 new Dialogo(
@@ -1403,6 +1433,16 @@ public class JogoController {
                         "FLASHBACK"
                 );
         cena402.setImagem("quarto_bruno_flashback.jpg");
+        cena402.setHumorProtagonista("brava");
+
+        cena402.adicionarDialogo(
+                new Dialogo(
+                        bruno.getNome(),
+                        "",
+                        "SPRITE",
+                        "assustado"
+                )
+        );
 
         cena402.adicionarDialogo(
                 new Dialogo(
@@ -1465,6 +1505,7 @@ public class JogoController {
                         "FLASHBACK"
                 );
         cena403.setImagem("sala_flashback.jpg");
+        cena403.setHumorProtagonista("pensativa");
 
         cena403.adicionarDialogo(
                 new Dialogo(
@@ -1541,6 +1582,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena404.setImagem("interrogatorio.jpg");
+        cena404.setHumorProtagonista("assustada");
 
         cena404.adicionarDialogo(
                 new Dialogo(
@@ -1635,6 +1677,7 @@ public class JogoController {
                         "NARRATIVA"
                 );
         cena405.setImagem("corredor_fumaça.jpg");
+        cena405.setHumorProtagonista("seria");
 
         cena405.definirProximaCena(501);
 
@@ -1666,6 +1709,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena501.setImagem("interrogatorio.jpg");
+        cena501.setHumorProtagonista("brava");
 
         cena501.adicionarDialogo(
                 new Dialogo(
@@ -1774,6 +1818,7 @@ public class JogoController {
                         "INTERROGATORIO"
                 );
         cena502.setImagem("interrogatorio.jpg");
+        cena502.setHumorProtagonista("seria");
 
         cena502.adicionarDialogo(
                 new Dialogo(
@@ -1885,6 +1930,16 @@ public class JogoController {
                         "MEMORIA"
                 );
         cena531.setImagem("fogo_quarto_bruno_muito_forte.jpg");
+        cena531.setHumorProtagonista("assustada");
+
+        cena531.adicionarDialogo(
+                new Dialogo(
+                        bruno.getNome(),
+                        "",
+                        "SPRITE",
+                        "medo"
+                )
+        );
 
         cena531.adicionarDialogo(
                 new Dialogo(
@@ -1936,6 +1991,16 @@ public class JogoController {
                         "MEMORIA"
                 );
         cena532.setImagem("fogo_quarto_bruno_fraco.jpg");
+        cena532.setHumorProtagonista("assustada");
+
+        cena532.adicionarDialogo(
+                new Dialogo(
+                        bruno.getNome(),
+                        "",
+                        "SPRITE",
+                        "medo"
+                )
+        );
 
         cena532.adicionarDialogo(
                 new Dialogo(
@@ -1989,6 +2054,7 @@ public class JogoController {
                         "FINAL"
                 );
         cena504.setImagem("interrogatorio.jpg");
+        cena504.setHumorProtagonista("destruida");
 
         // Instancia as quatro cenas de desfecho possíveis da investigação.
         Cena final591 =
@@ -2000,6 +2066,15 @@ public class JogoController {
                         "FINAL"
                 );
         final591.setImagem("so_policia_cena_crime.jpg");
+        final591.setHumorProtagonista("seria");
+        final591.adicionarDialogo(
+                new Dialogo(
+                        bruno.getNome(),
+                        "",
+                        "SPRITE",
+                        "triste"
+                )
+        );
 
         Cena final592 =
                 new Cena(
@@ -2010,6 +2085,7 @@ public class JogoController {
                         "FINAL"
                 );
         final592.setImagem("so_policia_cena_crime.jpg");
+        final592.setHumorProtagonista("chorando");
 
         Cena final593 =
                 new Cena(
@@ -2020,6 +2096,15 @@ public class JogoController {
                         "FINAL"
                 );
         final593.setImagem("so_policia_cena_crime.jpg");
+        final593.setHumorProtagonista("destruida");
+        final593.adicionarDialogo(
+                new Dialogo(
+                        bruno.getNome(),
+                        "",
+                        "SPRITE",
+                        "triste"
+                )
+        );
 
         Cena final594 =
                 new Cena(
@@ -2030,6 +2115,7 @@ public class JogoController {
                         "FINAL"
                 );
         final594.setImagem("so_policia_cena_crime.jpg");
+        final594.setHumorProtagonista("destruida");
 
         capitulo.adicionarCena(cena501);
         capitulo.adicionarCena(cena502);
@@ -2684,7 +2770,8 @@ public class JogoController {
         perfil.registrarExtra("FIM?");
         if (finalAlcancado.contains("BRUNO_MORTO"))
             perfil.registrarExtra("BRINQUEDO_BRUNO");
-
+        if (finalAlcancado.contains("TOIN_INDICIADO"))
+            perfil.registrarExtra("ISQUEIRO_TOIN");
         try {
             persistenciaG.salvar(perfil);
             return true;

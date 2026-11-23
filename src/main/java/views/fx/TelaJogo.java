@@ -21,6 +21,7 @@ import models.Cena;
 import models.Dialogo;
 import models.Escolha;
 import models.Personagem;
+import models.Protagonista;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -152,6 +153,28 @@ public class TelaJogo {
         return view;
     }
 
+    private ImageView criarSpriteProtagonista(Cena cena) {
+        if (cena == null || cena.getHumorProtagonista() == null || cena.getHumorProtagonista().isBlank()) {
+            return null;
+        }
+        Protagonista protagonista = jogo.getProtagonista();
+        if (protagonista == null) {
+            return null;
+        }
+        String arquivoSprite = protagonista.getSprite(cena.getHumorProtagonista());
+        if (arquivoSprite == null || arquivoSprite.isBlank()) {
+            return null;
+        }
+        Image img = carregarImagem("/personagens/" + arquivoSprite.trim());
+        if (img == null) {
+            return null;
+        }
+        ImageView view = new ImageView(img);
+        view.setPreserveRatio(true);
+        view.setFitHeight(120);
+        return view;
+    }
+
     private Image carregarImagem(String caminhoClasspath) {
         try (InputStream is = getClass().getResourceAsStream(caminhoClasspath)) {
             if (is == null) {
@@ -182,6 +205,16 @@ public class TelaJogo {
         }
 
         for (Dialogo dialogo : cena.getDialogos()) {
+            ImageView sprite = criarSpritePersonagem(dialogo);
+            boolean semFala = dialogo.getConteudo() == null || dialogo.getConteudo().isBlank();
+
+            if (semFala) {
+                if (sprite != null) {
+                    conteudo.getChildren().add(sprite);
+                }
+                continue;
+            }
+
             VBox balao = new VBox(4);
             balao.getStyleClass().add("balao");
             if (dialogo.getPersonagem() != null) {
@@ -189,7 +222,6 @@ public class TelaJogo {
             }
             balao.getChildren().add(Componentes.rotulo(dialogo.getConteudo(), "fala"));
 
-            ImageView sprite = criarSpritePersonagem(dialogo);
             if (sprite != null) {
                 HBox linhaDialogo = new HBox(12, sprite, balao);
                 linhaDialogo.setAlignment(Pos.CENTER_LEFT);
@@ -202,13 +234,14 @@ public class TelaJogo {
 
         conteudo.getChildren().add(Componentes.divisor());
 
+        VBox caixaAcoes = new VBox(10);
         if (escolhas.isEmpty()) {
             if (jogo.isJogoEncerrado()) {
-                conteudo.getChildren().add(Componentes.rotulo("Fim da investigação.", "secao"));
-                conteudo.getChildren().add(
+                caixaAcoes.getChildren().add(Componentes.rotulo("Fim da investigação.", "secao"));
+                caixaAcoes.getChildren().add(
                         Componentes.botao("Voltar ao menu", "botao-menu", nav::voltarAoMenu));
             } else {
-                conteudo.getChildren().add(Componentes.botao("Continuar ▶", "botao-menu", this::continuar));
+                caixaAcoes.getChildren().add(Componentes.botao("Continuar ▶", "botao-menu", this::continuar));
             }
         } else {
             for (int i = 0; i < escolhas.size(); i++) {
@@ -217,8 +250,18 @@ public class TelaJogo {
                         escolhas.get(i).getTextoOpcao(), "botao-escolha", () -> escolher(indice));
                 botao.setWrapText(true);
                 botao.setMaxWidth(Double.MAX_VALUE);
-                conteudo.getChildren().add(botao);
+                caixaAcoes.getChildren().add(botao);
             }
+        }
+
+        ImageView spriteProtagonista = criarSpriteProtagonista(cena);
+        if (spriteProtagonista != null) {
+            HBox blocoAcoes = new HBox(14, spriteProtagonista, caixaAcoes);
+            blocoAcoes.setAlignment(Pos.TOP_LEFT);
+            HBox.setHgrow(caixaAcoes, Priority.ALWAYS);
+            conteudo.getChildren().add(blocoAcoes);
+        } else {
+            conteudo.getChildren().add(caixaAcoes);
         }
 
         Componentes.preencherFeedback(feedback, mensagens);
